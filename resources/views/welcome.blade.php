@@ -1129,43 +1129,35 @@ html {
         <h2>Our Faculty Members</h2>
         <p>Meet our distinguished faculty members</p>
       </div>
+      {{-- Faculty cards now draw from the teachers collection so the homepage always reflects current data. --}}
       <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card faculty-card">
-            <img src="zenitsu.jpeg" class="card-img-top faculty-img" alt="Faculty">
-            <div class="card-body text-center">
-              <h5 class="card-title">Dr. John Doe</h5>
-              <p class="card-text">Professor & Head</p>
-              <p class="text-muted">Artificial Intelligence, Machine Learning</p>
-              <button class="btn faculty-btn">View Profile</button>
+        @forelse($teachers as $teacher)
+          <div class="col-md-4">
+            <div class="card faculty-card h-100">
+              <img
+                src="{{ $teacher->profile_image ?? 'https://ui-avatars.com/api/?name=' . urlencode($teacher->name) . '&background=1a2238&color=ffffff' }}"
+                class="card-img-top faculty-img"
+                alt="{{ $teacher->name }}"
+              >
+              <div class="card-body text-center d-flex flex-column">
+                <h5 class="card-title">{{ $teacher->name }}</h5>
+                <p class="card-text">{{ $teacher->designation }}</p>
+                <p class="text-muted">{{ $teacher->research_interests }}</p>
+                <a href="{{ route('teachers.show', $teacher) }}" class="btn faculty-btn mt-auto">View Profile</a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card faculty-card">
-            <img src="zenitsu.jpeg" class="card-img-top faculty-img" alt="Faculty">
-            <div class="card-body text-center">
-              <h5 class="card-title">Dr. Jane Smith</h5>
-              <p class="card-text">Associate Professor</p>
-              <p class="text-muted">Data Science, Big Data Analytics</p>
-              <button class="btn faculty-btn">View Profile</button>
+        @empty
+          <div class="col-12">
+            <div class="card faculty-card text-center p-5">
+              <h5 class="card-title">Faculty profiles coming soon</h5>
+              <p class="text-muted mb-0">We're curating detailed information about our respected teachers. Please check back shortly.</p>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card faculty-card">
-            <img src="zenitsu.jpeg" class="card-img-top faculty-img" alt="Faculty">
-            <div class="card-body text-center">
-              <h5 class="card-title">Dr. Rahul Sheikh</h5>
-              <p class="card-text">Assistant Professor</p>
-              <p class="text-muted">Computer Networks, Cybersecurity</p>
-              <button class="btn faculty-btn">View Profile</button>
-            </div>
-          </div>
-        </div>
+        @endforelse
       </div>
       <div class="text-center mt-5">
-        <button class="btn faculty-btn">View All Faculty Members</button>
+        <a href="{{ route('teachers.index') }}" class="btn faculty-btn">View All Faculty Members</a>
       </div>
     </div>
   </section>
