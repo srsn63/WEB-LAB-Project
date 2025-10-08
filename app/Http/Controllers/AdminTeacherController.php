@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AdminTeacherController extends Controller
@@ -17,7 +16,6 @@ class AdminTeacherController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255'],
             'designation' => ['required', 'string', 'in:Professor,Associate Professor,Assistant Professor,Lecturer'],
             'department' => ['required', 'string', 'max:255'],
             'availability_status' => ['nullable', 'string', 'in:Available,On Leave'],
@@ -34,11 +32,8 @@ class AdminTeacherController extends Controller
             'publications' => ['nullable', 'string'],
         ]);
 
-        $slug = $this->resolveUniqueSlug($data['slug'] ?? null, $data['name']);
-
         Teacher::create([
             'name' => $data['name'],
-            'slug' => $slug,
             'designation' => $data['designation'],
             'department' => $data['department'],
             'availability_status' => $data['availability_status'] ?? null,
@@ -75,7 +70,6 @@ class AdminTeacherController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255'],
             'designation' => ['required', 'string', 'in:Professor,Associate Professor,Assistant Professor,Lecturer'],
             'department' => ['required', 'string', 'max:255'],
             'availability_status' => ['nullable', 'string', 'in:Available,On Leave'],
@@ -92,11 +86,8 @@ class AdminTeacherController extends Controller
             'publications' => ['nullable', 'string'],
         ]);
 
-        $slug = $this->resolveUniqueSlugForUpdate($data['slug'] ?? null, $data['name'], $teacher);
-
         $teacher->update([
             'name' => $data['name'],
-            'slug' => $slug,
             'designation' => $data['designation'],
             'department' => $data['department'],
             'availability_status' => $data['availability_status'] ?? null,
@@ -131,47 +122,7 @@ class AdminTeacherController extends Controller
             ->with('status', "Teacher profile for {$teacherName} has been deleted.");
     }
 
-    /**
-     * Build a slug and ensure it remains unique in the teachers table.
-     */
-    private function resolveUniqueSlug(?string $requestedSlug, string $name): string
-    {
-        $baseSlug = Str::slug($requestedSlug ?: $name);
 
-        if ($baseSlug === '') {
-            $baseSlug = 'teacher-'.Str::random(6);
-        }
-
-        $slug = $baseSlug;
-        $suffix = 1;
-
-        while (Teacher::where('slug', $slug)->exists()) {
-            $slug = $baseSlug.'-'.($suffix++);
-        }
-
-        return $slug;
-    }
-
-    /**
-     * Build a unique slug for updates, excluding the current teacher.
-     */
-    private function resolveUniqueSlugForUpdate(?string $requestedSlug, string $name, Teacher $teacher): string
-    {
-        $baseSlug = Str::slug($requestedSlug ?: $name);
-
-        if ($baseSlug === '') {
-            $baseSlug = 'teacher-'.Str::random(6);
-        }
-
-        $slug = $baseSlug;
-        $suffix = 1;
-
-        while (Teacher::where('slug', $slug)->where('id', '!=', $teacher->id)->exists()) {
-            $slug = $baseSlug.'-'.($suffix++);
-        }
-
-        return $slug;
-    }
 
     /**
      * Turn newline separated textarea input into a clean array payload.

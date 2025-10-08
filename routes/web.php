@@ -15,7 +15,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
-Route::get('/teachers/{teacher:slug}', [TeacherController::class, 'show'])->name('teachers.show');
+Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])->name('teachers.show');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login.form');

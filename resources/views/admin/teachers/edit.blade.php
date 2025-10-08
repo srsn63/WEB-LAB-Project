@@ -98,11 +98,6 @@
                                 @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Custom Slug <span class="text-secondary">(optional)</span></label>
-                                <input type="text" name="slug" value="{{ old('slug', $teacher->slug) }}" class="form-control @error('slug') is-invalid @enderror" placeholder="e.g. md-aziz-hasan">
-                                @error('slug')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                            </div>
-                            <div class="col-md-6">
                                 <label class="form-label">Designation <span>*</span></label>
                                 <select name="designation" class="form-select @error('designation') is-invalid @enderror" required>
                                     <option value="">Select designation...</option>

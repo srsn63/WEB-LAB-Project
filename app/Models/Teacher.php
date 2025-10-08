@@ -11,7 +11,6 @@ class Teacher extends Model
      */
     protected $fillable = [
         'name',
-        'slug',
         'designation',
         'department',
         'availability_status',
@@ -38,10 +37,10 @@ class Teacher extends Model
     ];
 
     /**
-     * Resolve route-model binding via unique slugs.
+     * Resolve route-model binding via IDs (default behavior).
      */
     public function getRouteKeyName(): string
     {
-        return 'slug';
+        return 'id';
     }
 }
