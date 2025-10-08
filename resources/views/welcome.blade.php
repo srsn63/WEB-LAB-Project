@@ -711,6 +711,8 @@ section {
   height: 100%;
   background: linear-gradient(90deg, rgba(96, 165, 250, 0.15), transparent);
   transition: width 0.5s ease;
+  pointer-events: none; /* avoid blocking clicks */
+  z-index: 0;
 }
 
 .notice-item:hover::before {
@@ -748,6 +750,20 @@ section {
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
+  position: relative;
+  z-index: 1; /* above decorative overlay */
+}
+
+.notice-item .text-primary {
+  color: var(--bright-blue) !important;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.notice-item .text-primary:hover {
+  color: #38bdf8 !important;
+  text-decoration: underline;
 }
 
 /* Contact Section - Better form styling */
@@ -1205,25 +1221,28 @@ html {
       </div>
       <div class="row">
         <div class="col-lg-8 mx-auto">
-          <div class="notice-item">
-            <div class="notice-date">October 15, 2023</div>
-            <h5 class="notice-title">Midterm Examination Schedule Released</h5>
-            <p>The schedule for the Fall 2023 midterm examinations has been published. Please check the academic portal for details.</p>
-          </div>
-          <div class="notice-item">
-            <div class="notice-date">October 10, 2023</div>
-            <h5 class="notice-title">Seminar on Artificial Intelligence</h5>
-            <p>Department of CSE is organizing a seminar on "Recent Advances in AI" by Dr. Jane Smith on October 25, 2023.</p>
-          </div>
-          <div class="notice-item">
-            <div class="notice-date">October 5, 2023</div>
-            <h5 class="notice-title">Lab Assignments Deadline Extended</h5>
-            <p>The deadline for Data Structures lab assignments has been extended to October 20, 2023.</p>
-          </div>
+          @forelse($notices as $notice)
+            <div class="notice-item">
+              <div class="notice-date">{{ $notice->created_at->format('F d, Y') }}</div>
+              <h5 class="notice-title">{{ $notice->title }}</h5>
+              <p>
+                {{ $notice->preview }}
+                @if($notice->needsReadMore())
+                  <a href="{{ route('notices.show', $notice) }}" class="text-primary fw-semibold ms-2">Read More</a>
+                @endif
+              </p>
+            </div>
+          @empty
+            <div class="notice-item">
+              <div class="notice-date">{{ now()->format('F d, Y') }}</div>
+              <h5 class="notice-title">No notices available</h5>
+              <p>Stay tuned for upcoming announcements and important updates from the department.</p>
+            </div>
+          @endforelse
         </div>
       </div>
       <div class="text-center mt-5">
-        <button class="btn faculty-btn">View All Notices</button>
+        <a href="{{ route('notices.index') }}" class="btn faculty-btn">View All Notices</a>
       </div>
     </div>
   </section>

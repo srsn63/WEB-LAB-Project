@@ -217,6 +217,66 @@
             </div>
         </div>
     </div>
+
+    <!-- Notice Management Section -->
+    <div class="row g-4 mt-4">
+        <div class="col-lg-7">
+            <div class="card card-glass h-100">
+                <div class="card-body p-4">
+                    <h2 class="card-title h4 mb-3">Publish a Notice</h2>
+                    <p class="text-secondary">Use this panel to publish notices for students and visitors. All fields are required.</p>
+
+                    <form method="POST" action="{{ route('admin.notices.store') }}" class="mt-4">
+                        @csrf
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Notice Title <span>*</span></label>
+                                <input type="text" name="title" value="{{ old('title') }}" class="form-control @error('title') is-invalid @enderror" required>
+                                @error('title')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Notice Content <span>*</span></label>
+                                <textarea name="content" rows="6" class="form-control @error('content') is-invalid @enderror" required>{{ old('content') }}</textarea>
+                                @error('content')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Publish Notice</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card card-glass">
+                <div class="card-body p-4">
+                    <h2 class="card-title h4 mb-3">Recently Published Notices</h2>
+                    <p class="text-secondary">Manage your published notices. Edit or delete as needed.</p>
+                    <ul class="list-group list-group-flush">
+                        @forelse($recentNotices as $notice)
+                            <li class="list-group-item bg-transparent text-light d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="fw-semibold">{{ $notice->title }}</div>
+                                    <small class="text-secondary">{{ $notice->created_at->format('M d, Y h:i A') }}</small>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('notices.show', $notice) }}" class="badge badge-soft">View</a>
+                                    <a href="{{ route('admin.notices.edit', $notice) }}" class="badge bg-warning text-dark">Edit</a>
+                                    <form method="POST" action="{{ route('admin.notices.destroy', $notice) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this notice?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="badge bg-danger border-0">Delete</button>
+                                    </form>
+                                </div>
+                            </li>
+                        @empty
+                            <li class="list-group-item bg-transparent text-secondary">No notices published yet. Start by creating one!</li>
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
