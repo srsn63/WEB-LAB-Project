@@ -16,9 +16,9 @@ class AdminTeacherController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'is_head' => ['nullable', 'boolean'],
             'designation' => ['required', 'string', 'in:Professor,Associate Professor,Assistant Professor,Lecturer'],
-            'department' => ['required', 'string', 'max:255'],
-            'availability_status' => ['nullable', 'string', 'in:Available,On Leave'],
+            'availability_status' => ['required', 'string', 'in:Available,On Leave'],
             'email' => ['nullable', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
             'office_room' => ['nullable', 'string', 'max:255'],
@@ -32,11 +32,28 @@ class AdminTeacherController extends Controller
             'publications' => ['nullable', 'string'],
         ]);
 
+        // Ensure only a Professor can be assigned as Head
+        $isHead = filter_var($request->input('is_head'), FILTER_VALIDATE_BOOLEAN);
+        if ($isHead && $data['designation'] !== 'Professor') {
+            return redirect()->back()->withInput()->withErrors(['is_head' => 'Only a Professor can be assigned as Head of Department.']);
+        }
+
+        // Ensure only Available teachers can be assigned as Head
+        if ($isHead && $data['availability_status'] === 'On Leave') {
+            return redirect()->back()->withInput()->withErrors(['is_head' => 'Teachers on leave cannot be appointed as Head of Department.']);
+        }
+
+        // If marking as head, unset existing head(s)
+        if ($isHead) {
+            Teacher::where('is_head', true)->update(['is_head' => false]);
+        }
+
         Teacher::create([
             'name' => $data['name'],
+            'is_head' => $isHead,
             'designation' => $data['designation'],
-            'department' => $data['department'],
-            'availability_status' => $data['availability_status'] ?? null,
+            'department' => 'Department of Computer Science & Engineering',
+            'availability_status' => $data['availability_status'],
             'email' => $data['email'] ?? null,
             'phone' => $data['phone'] ?? null,
             'office_room' => $data['office_room'] ?? null,
@@ -70,9 +87,9 @@ class AdminTeacherController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'is_head' => ['nullable', 'boolean'],
             'designation' => ['required', 'string', 'in:Professor,Associate Professor,Assistant Professor,Lecturer'],
-            'department' => ['required', 'string', 'max:255'],
-            'availability_status' => ['nullable', 'string', 'in:Available,On Leave'],
+            'availability_status' => ['required', 'string', 'in:Available,On Leave'],
             'email' => ['nullable', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
             'office_room' => ['nullable', 'string', 'max:255'],
@@ -86,11 +103,26 @@ class AdminTeacherController extends Controller
             'publications' => ['nullable', 'string'],
         ]);
 
+        $isHead = filter_var($request->input('is_head'), FILTER_VALIDATE_BOOLEAN);
+        if ($isHead && $data['designation'] !== 'Professor') {
+            return redirect()->back()->withInput()->withErrors(['is_head' => 'Only a Professor can be assigned as Head of Department.']);
+        }
+
+        // Ensure only Available teachers can be assigned as Head
+        if ($isHead && $data['availability_status'] === 'On Leave') {
+            return redirect()->back()->withInput()->withErrors(['is_head' => 'Teachers on leave cannot be appointed as Head of Department.']);
+        }
+
+        if ($isHead) {
+            // unset other heads
+            Teacher::where('is_head', true)->where('id', '!=', $teacher->id)->update(['is_head' => false]);
+        }
+
         $teacher->update([
+            'is_head' => $isHead,
             'name' => $data['name'],
             'designation' => $data['designation'],
-            'department' => $data['department'],
-            'availability_status' => $data['availability_status'] ?? null,
+            'availability_status' => $data['availability_status'],
             'email' => $data['email'] ?? null,
             'phone' => $data['phone'] ?? null,
             'office_room' => $data['office_room'] ?? null,

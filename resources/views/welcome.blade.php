@@ -248,19 +248,19 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(135deg, var(--light-blue) 0%, var(--bright-blue) 100%);
   color: var(--white);
   font-weight: 800;
-  padding: 1.75rem 4rem;
-  border-radius: 60px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
+  padding: 0.9rem 2rem; /* reduced padding */
+  border-radius: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 15px 50px rgba(59, 130, 246, 0.6),
               0 0 40px rgba(96, 165, 250, 0.4),
               inset 0 0 20px rgba(255, 255, 255, 0.1);
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 1.3rem;
+  font-size: 1rem; /* slightly smaller text */
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.6rem; /* smaller gap between text and icon */
   position: relative;
   overflow: hidden;
   animation: heroButtonPulse 3s ease-in-out infinite;
@@ -293,8 +293,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-btn:hover::before {
-  width: 300px;
-  height: 300px;
+  width: 220px; /* scaled down ripple */
+  height: 220px;
 }
 
 .hero-btn:hover {
@@ -1148,21 +1148,45 @@ html {
       {{-- Faculty cards now draw from the teachers collection so the homepage always reflects current data. --}}
       <div class="row g-4">
         @forelse($teachers as $teacher)
-          <div class="col-md-4">
-            <div class="card faculty-card h-100">
-              <img
-                src="{{ $teacher->profile_image ?? 'https://ui-avatars.com/api/?name=' . urlencode($teacher->name) . '&background=1a2238&color=ffffff' }}"
-                class="card-img-top faculty-img"
-                alt="{{ $teacher->name }}"
-              >
-              <div class="card-body text-center d-flex flex-column">
-                <h5 class="card-title">{{ $teacher->name }}</h5>
-                <p class="card-text">{{ $teacher->designation }}</p>
-                <p class="text-muted">{{ $teacher->research_interests }}</p>
-                <a href="{{ route('teachers.show', $teacher) }}" class="btn faculty-btn mt-auto">View Profile</a>
+          @if($teacher->is_head)
+            <div class="col-12">
+              <div class="card faculty-card h-100 p-3" style="display:flex;align-items:center;gap:1.5rem;">
+                <img
+                  src="{{ $teacher->profile_image ?? 'https://ui-avatars.com/api/?name=' . urlencode($teacher->name) . '&background=1a2238&color=ffffff' }}"
+                  class="faculty-img img-fluid" style="width:140px;height:140px;border-radius:12px;object-fit:cover;"
+                  alt="{{ $teacher->name }}"
+                >
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h4 class="card-title">{{ $teacher->name }}</h4>
+                      <p class="card-text">{{ $teacher->designation }} <span class="badge bg-info ms-2">Head of Department</span></p>
+                      <p class="text-muted">{{ $teacher->research_interests }}</p>
+                    </div>
+                    <div>
+                      <a href="{{ route('teachers.show', $teacher) }}" class="btn faculty-btn">View Profile</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          @else
+            <div class="col-md-4">
+              <div class="card faculty-card h-100">
+                <img
+                  src="{{ $teacher->profile_image ?? 'https://ui-avatars.com/api/?name=' . urlencode($teacher->name) . '&background=1a2238&color=ffffff' }}"
+                  class="card-img-top faculty-img"
+                  alt="{{ $teacher->name }}"
+                >
+                <div class="card-body text-center d-flex flex-column">
+                  <h5 class="card-title">{{ $teacher->name }}</h5>
+                  <p class="card-text">{{ $teacher->designation }}</p>
+                  <p class="text-muted">{{ $teacher->research_interests }}</p>
+                  <a href="{{ route('teachers.show', $teacher) }}" class="btn faculty-btn mt-auto">View Profile</a>
+                </div>
+              </div>
+            </div>
+          @endif
         @empty
           <div class="col-12">
             <div class="card faculty-card text-center p-5">

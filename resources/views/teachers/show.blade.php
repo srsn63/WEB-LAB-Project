@@ -7,29 +7,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.25), transparent 45%),
-                        linear-gradient(180deg, #020617 0%, #0f172a 50%, #111827 100%);
-            color: #e2e8f0;
-            font-family: 'Poppins', sans-serif;
+            background: #000000 !important;
             min-height: 100vh;
+            color: #ffffff !important;
+            font-family: 'Poppins', sans-serif;
         }
         .navbar {
-            background: rgba(15, 23, 42, 0.92) !important;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+            background: #000000 !important;
+            border-bottom: 1px solid #333333;
         }
-        .hero-card {
-            background: rgba(15, 23, 42, 0.82);
-            border-radius: 28px;
-            border: 1px solid rgba(59, 130, 246, 0.35);
-            box-shadow: 0 30px 120px rgba(14, 165, 233, 0.35);
-            overflow: hidden;
+        .hero-card, .section-card, .contact-card {
+            background: #000000 !important;
+            border: 2px solid #333333;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+        }
+        .section-card {
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .contact-card {
+            padding: 1.8rem;
         }
         .profile-image {
             width: 100%;
-            border-radius: 24px;
+            border-radius: 12px;
             object-fit: cover;
             aspect-ratio: 4/5;
-            border: 1px solid rgba(148, 163, 184, 0.25);
+            border: 2px solid #333333;
         }
         .chip {
             display: inline-flex;
@@ -37,31 +43,25 @@
             gap: 0.35rem;
             padding: 0.4rem 0.9rem;
             border-radius: 999px;
-            background: rgba(59, 130, 246, 0.14);
-            border: 1px solid rgba(59, 130, 246, 0.35);
-            color: #bfdbfe;
+            background: #333333;
+            border: 1px solid #555555;
+            color: #ffffff !important;
             font-size: 0.8rem;
             margin: 0.25rem 0.2rem;
-        }
-        .section-card {
-            background: rgba(15, 23, 42, 0.78);
-            border-radius: 24px;
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            box-shadow: 0 20px 90px rgba(30, 64, 175, 0.35);
-            padding: 2rem;
-            margin-bottom: 2rem;
         }
         .section-card h2 {
             font-size: 1.4rem;
             margin-bottom: 1.25rem;
+            color: #ffffff !important;
         }
         .timeline {
-            border-left: 2px solid rgba(56, 189, 248, 0.6);
+            border-left: 2px solid #ffffff;
             padding-left: 1.5rem;
         }
         .timeline-item {
             position: relative;
             margin-bottom: 1.2rem;
+            color: #ffffff !important;
         }
         .timeline-item::before {
             content: '';
@@ -70,28 +70,55 @@
             top: 0.3rem;
             width: 12px;
             height: 12px;
-            background: linear-gradient(135deg, #2563eb, #38bdf8);
+            background: #ffffff;
             border-radius: 50%;
-            box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.15);
-        }
-        .contact-card {
-            background: rgba(2, 6, 23, 0.88);
-            border-radius: 24px;
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            padding: 1.8rem;
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.15);
         }
         .contact-card a {
-            color: #60a5fa;
+            color: #ffffff !important;
         }
-        .btn-gradient {
+        .btn-gradient, .btn-primary {
             background: linear-gradient(135deg, #2563eb, #38bdf8);
             border: none;
             padding: 0.6rem 1.4rem;
             border-radius: 999px;
             font-weight: 600;
+            color: #ffffff;
         }
-        .text-muted {
-            color: rgba(148, 163, 184, 0.85) !important;
+        .btn-outline-light {
+            border-color: #ffffff;
+            color: #ffffff;
+            background: #000000;
+        }
+        .btn-outline-light:hover {
+            background: #333333;
+            color: #ffffff;
+        }
+        .text-muted, .text-secondary {
+            color: #cccccc !important;
+        }
+        .text-info {
+            color: #ffffff !important;
+        }
+        .form-control {
+            background: #000000 !important;
+            border: 2px solid #555555 !important;
+            color: #ffffff !important;
+        }
+        .form-control:focus {
+            background: #000000 !important;
+            border-color: #ffffff !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+        .input-group .btn {
+            border-color: #555555;
+        }
+        h1, h2, h3, h4, h5, h6, p, strong {
+            color: #ffffff !important;
+        }
+        .lead {
+            color: #ffffff !important;
         }
     </style>
 </head>
@@ -209,15 +236,40 @@
 
                 <div class="section-card">
                     <h2>Share Profile</h2>
-                    <p class="text-muted">Copy the link below to share this teacher's dashboard.</p>
                     <div class="input-group">
-                        <input type="text" class="form-control" value="{{ request()->fullUrl() }}" readonly>
-                        <a href="{{ request()->fullUrl() }}" class="btn btn-gradient">Open</a>
+                        <input type="text" class="form-control" id="profileUrl" value="{{ request()->fullUrl() }}" readonly>
+                        <button class="btn btn-gradient" onclick="copyProfileUrl()" title="Copy profile link">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+function copyProfileUrl() {
+    const urlInput = document.getElementById('profileUrl');
+    urlInput.select();
+    urlInput.setSelectionRange(0, 99999); // For mobile devices
+    
+    navigator.clipboard.writeText(urlInput.value).then(function() {
+        // Change button appearance briefly to show success
+        const button = document.querySelector('button[onclick="copyProfileUrl()"]');
+        const originalHTML = button.innerHTML;
+        button.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>';
+        setTimeout(() => {
+            button.innerHTML = originalHTML;
+        }, 1000);
+    }).catch(function() {
+        // Fallback for older browsers
+        document.execCommand('copy');
+    });
+}
+</script>
 </body>
 </html>

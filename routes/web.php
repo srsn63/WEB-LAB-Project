@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // Surface a curated selection of teachers for the landing page cards.
-    $teachers = Teacher::orderBy('name')->take(3)->get();
+    $teachers = Teacher::ordered()->take(3)->get();
     // Get recent notices for the home page.
     $notices = Notice::orderByDesc('created_at')->take(5)->get();
 

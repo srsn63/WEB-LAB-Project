@@ -12,7 +12,7 @@ class TeacherController extends Controller
      */
     public function index(): View
     {
-        $teachers = Teacher::orderBy('name')->get();
+        $teachers = Teacher::ordered()->get();
 
         return view('teachers.index', compact('teachers'));
     }

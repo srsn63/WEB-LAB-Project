@@ -11,6 +11,7 @@ class Teacher extends Model
      */
     protected $fillable = [
         'name',
+        'is_head',
         'designation',
         'department',
         'availability_status',
@@ -35,6 +36,26 @@ class Teacher extends Model
         'honors' => 'array',
         'courses' => 'array',
     ];
+
+    /**
+     * Scope a query to order teachers by head first, then by designation priority, then name.
+     */
+    public function scopeOrdered($query)
+    {
+        $order = [
+            'Head' => 0,
+            'Professor' => 1,
+            'Associate Professor' => 2,
+            'Assistant Professor' => 3,
+            'Lecturer' => 4,
+        ];
+
+        return $query->orderByDesc('is_head')
+            ->orderByRaw("CASE\n" .
+                implode("\n", array_map(function ($k, $v) { return "WHEN designation = '".$k."' THEN $v"; }, array_keys($order), $order)) .
+                "\nELSE 999 END")
+            ->orderBy('name');
+    }
 
     /**
      * Resolve route-model binding via IDs (default behavior).
