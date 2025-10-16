@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminContactMessageController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminNoticeController;
 use App\Http\Controllers\AdminTeacherController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\TeacherController;
 use App\Models\Notice;
@@ -25,6 +27,9 @@ Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])->name('tea
 Route::get('/notices', [NoticeController::class, 'index'])->name('notices.index');
 Route::get('/notices/{notice}', [NoticeController::class, 'show'])->name('notices.show');
 
+// Public contact form submission
+Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login.form');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('login');
@@ -44,5 +49,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/notices/{notice}/edit', [AdminNoticeController::class, 'edit'])->name('notices.edit');
         Route::put('/notices/{notice}', [AdminNoticeController::class, 'update'])->name('notices.update');
         Route::delete('/notices/{notice}', [AdminNoticeController::class, 'destroy'])->name('notices.destroy');
+        
+        // Contact message routes
+        Route::get('/messages', [AdminContactMessageController::class, 'index'])->name('messages.index');
+        Route::get('/messages/{message}', [AdminContactMessageController::class, 'show'])->name('messages.show');
+        Route::delete('/messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('messages.destroy');
     });
 });

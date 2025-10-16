@@ -1308,17 +1308,33 @@ html {
         <div class="col-lg-7">
           <div class="contact-form">
             <h4>Send us a Message</h4>
-            <form>
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724;">
+              {{ session('success') }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            <form action="{{ route('contact.store') }}" method="POST">
+              @csrf
               <div class="row">
                 <div class="col-md-6">
-                  <input type="text" class="form-control" placeholder="Your Name">
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required>
                 </div>
                 <div class="col-md-6">
-                  <input type="email" class="form-control" placeholder="Your Email">
+                  <input type="email" name="email" class="form-control" placeholder="Your Email" value="{{ old('email') }}" required>
                 </div>
               </div>
-              <input type="text" class="form-control" placeholder="Subject">
-              <textarea class="form-control" rows="5" placeholder="Your Message"></textarea>
+              <textarea name="message" class="form-control" rows="5" placeholder="Your Message" required>{{ old('message') }}</textarea>
               <button type="submit" class="btn w-100">Send Message</button>
             </form>
           </div>
@@ -1463,6 +1479,23 @@ html {
         }
       });
     });
+
+    // Show toast notification on success
+    @if(session('success'))
+    window.addEventListener('DOMContentLoaded', function() {
+      // Scroll to contact section
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // Auto dismiss alert after 5 seconds
+      setTimeout(function() {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+          const bsAlert = new bootstrap.Alert(alert);
+          bsAlert.close();
+        }
+      }, 5000);
+    });
+    @endif
   </script>
 </body>
 </html>
