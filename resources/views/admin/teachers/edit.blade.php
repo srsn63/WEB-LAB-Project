@@ -175,9 +175,15 @@
                                 @error('designation')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" value="{{ old('email', $teacher->email) }}" class="form-control @error('email') is-invalid @enderror">
+                                <label class="form-label">Email <span>*</span></label>
+                                <input type="email" name="email" value="{{ old('email', $teacher->email) }}" class="form-control @error('email') is-invalid @enderror" placeholder="username@teachers.gmail.com" required>
+                                <small class="text-muted" style="color: #999999 !important;">Must end with @teachers.gmail.com</small>
                                 @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Password <span>(leave blank to keep current)</span></label>
+                                <input type="text" name="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" placeholder="Enter new password">
+                                @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Availability Status <span>*</span></label>

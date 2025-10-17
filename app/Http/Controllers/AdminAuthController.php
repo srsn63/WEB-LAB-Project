@@ -31,8 +31,10 @@ class AdminAuthController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', 'regex:/^[\w\.\-]+@admin\.gmail\.com$/'],
             'password' => ['required', 'string'],
+        ], [
+            'email.regex' => 'Only admin emails (@admin.gmail.com) are allowed.',
         ]);
 
         $admin = Admin::where('email', $credentials['email'])->first();

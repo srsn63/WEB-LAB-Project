@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminTeacherController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TeacherAuthController;
+use App\Http\Controllers\TeacherDashboardController;
 use App\Models\Notice;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
@@ -54,5 +56,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/messages', [AdminContactMessageController::class, 'index'])->name('messages.index');
         Route::get('/messages/{message}', [AdminContactMessageController::class, 'show'])->name('messages.show');
         Route::delete('/messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('messages.destroy');
+    });
+});
+
+// Teacher authentication and dashboard routes
+Route::prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/login', [TeacherAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [TeacherAuthController::class, 'login']);
+    Route::post('/logout', [TeacherAuthController::class, 'logout'])->name('logout');
+
+    Route::middleware('teacher.auth')->group(function () {
+        Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+        Route::put('/profile', [TeacherDashboardController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/password', [TeacherDashboardController::class, 'changePassword'])->name('password.change');
     });
 });

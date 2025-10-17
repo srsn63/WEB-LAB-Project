@@ -6,6 +6,7 @@ use App\Models\Teacher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
 
 class AdminTeacherController extends Controller
 {
@@ -19,7 +20,8 @@ class AdminTeacherController extends Controller
             'is_head' => ['nullable', 'boolean'],
             'designation' => ['required', 'string', 'in:Professor,Associate Professor,Assistant Professor,Lecturer'],
             'availability_status' => ['required', 'string', 'in:Available,On Leave'],
-            'email' => ['nullable', 'email', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:teachers', 'regex:/^[\w\.\-]+@teachers\.gmail\.com$/'],
+            'password' => ['required', 'string', 'min:6'],
             'phone' => ['nullable', 'string', 'max:255'],
             'office_room' => ['nullable', 'string', 'max:255'],
             'website_url' => ['nullable', 'url'],
@@ -30,6 +32,8 @@ class AdminTeacherController extends Controller
             'honors' => ['nullable', 'string'],
             'courses' => ['nullable', 'string'],
             'publications' => ['nullable', 'string'],
+        ], [
+            'email.regex' => 'Email must end with @teachers.gmail.com',
         ]);
 
         // Ensure only a Professor can be assigned as Head
@@ -54,7 +58,8 @@ class AdminTeacherController extends Controller
             'designation' => $data['designation'],
             'department' => 'Department of Computer Science & Engineering',
             'availability_status' => $data['availability_status'],
-            'email' => $data['email'] ?? null,
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
             'phone' => $data['phone'] ?? null,
             'office_room' => $data['office_room'] ?? null,
             'website_url' => $data['website_url'] ?? null,
@@ -69,7 +74,7 @@ class AdminTeacherController extends Controller
 
         return redirect()
             ->route('admin.dashboard')
-            ->with('status', 'Teacher profile created successfully.');
+            ->with('status', 'Teacher profile created successfully. Email: ' . $data['email'] . ' | Password: ' . $data['password']);
     }
 
     /**
@@ -90,7 +95,8 @@ class AdminTeacherController extends Controller
             'is_head' => ['nullable', 'boolean'],
             'designation' => ['required', 'string', 'in:Professor,Associate Professor,Assistant Professor,Lecturer'],
             'availability_status' => ['required', 'string', 'in:Available,On Leave'],
-            'email' => ['nullable', 'email', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:teachers,email,' . $teacher->id, 'regex:/^[\w\.\-]+@teachers\.gmail\.com$/'],
+            'password' => ['nullable', 'string', 'min:6'],
             'phone' => ['nullable', 'string', 'max:255'],
             'office_room' => ['nullable', 'string', 'max:255'],
             'website_url' => ['nullable', 'url'],
@@ -101,6 +107,8 @@ class AdminTeacherController extends Controller
             'honors' => ['nullable', 'string'],
             'courses' => ['nullable', 'string'],
             'publications' => ['nullable', 'string'],
+        ], [
+            'email.regex' => 'Email must end with @teachers.gmail.com',
         ]);
 
         $isHead = filter_var($request->input('is_head'), FILTER_VALIDATE_BOOLEAN);
@@ -118,12 +126,12 @@ class AdminTeacherController extends Controller
             Teacher::where('is_head', true)->where('id', '!=', $teacher->id)->update(['is_head' => false]);
         }
 
-        $teacher->update([
+        $updateData = [
             'is_head' => $isHead,
             'name' => $data['name'],
             'designation' => $data['designation'],
             'availability_status' => $data['availability_status'],
-            'email' => $data['email'] ?? null,
+            'email' => $data['email'],
             'phone' => $data['phone'] ?? null,
             'office_room' => $data['office_room'] ?? null,
             'website_url' => $data['website_url'] ?? null,
@@ -134,7 +142,14 @@ class AdminTeacherController extends Controller
             'honors' => $this->splitToArray($data['honors'] ?? null),
             'courses' => $this->splitToArray($data['courses'] ?? null),
             'publications' => $data['publications'] ?? null,
-        ]);
+        ];
+
+        // Only update password if provided
+        if (!empty($data['password'])) {
+            $updateData['password'] = Hash::make($data['password']);
+        }
+
+        $teacher->update($updateData);
 
         return redirect()
             ->route('admin.dashboard')

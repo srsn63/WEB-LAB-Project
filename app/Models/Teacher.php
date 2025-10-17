@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Teacher extends Model
+class Teacher extends Authenticatable
 {
+    use Notifiable;
+
     /**
      * Mass assignable attributes for teacher profiles.
      */
@@ -16,6 +20,7 @@ class Teacher extends Model
         'department',
         'availability_status',
         'email',
+        'password',
         'phone',
         'office_room',
         'website_url',
@@ -29,12 +34,22 @@ class Teacher extends Model
     ];
 
     /**
+     * The attributes that should be hidden for serialization.
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
      * Attribute casting for structured teacher data.
      */
     protected $casts = [
         'education' => 'array',
         'honors' => 'array',
         'courses' => 'array',
+        'email_verified_at' => 'datetime',
+        'is_head' => 'boolean',
     ];
 
     /**

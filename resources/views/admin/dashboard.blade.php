@@ -171,9 +171,15 @@
                                 @error('designation')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror">
+                                <label class="form-label">Email <span>*</span></label>
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="username@teachers.gmail.com" required>
+                                <small class="text-muted" style="color: #999999 !important;">Must end with @teachers.gmail.com</small>
                                 @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Password <span>*</span></label>
+                                <input type="text" name="password" value="{{ old('password') }}" class="form-control @error('password') is-invalid @enderror" placeholder="Enter password" required>
+                                @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Availability Status <span>*</span></label>
@@ -263,7 +269,7 @@
                             <li class="list-group-item bg-transparent text-light d-flex justify-content-between align-items-start">
                                 <div>
                                     <div class="fw-semibold">{{ $teacher->name }} @if($teacher->is_head) <span class="badge bg-info ms-2">Head</span> @endif</div>
-                                    <small class="text-secondary">{{ $teacher->designation }}</small>
+                                    <small class="text-secondary">{{ $teacher->designation }}<br>📧 {{ $teacher->email }}</small>
                                 </div>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('teachers.show', $teacher) }}" class="badge badge-soft">View</a>
