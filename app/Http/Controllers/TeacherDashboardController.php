@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Services\AuditLogger;
 
 class TeacherDashboardController extends Controller
 {
@@ -46,7 +47,21 @@ class TeacherDashboardController extends Controller
             $validated['courses'] = array_filter(explode("\n", trim($validated['courses'])));
         }
 
+        $before = $teacher->getOriginal();
         $teacher->update($validated);
+        $after = $teacher->fresh()->toArray();
+
+        $changed = [];
+        foreach ($validated as $k => $v) {
+            if (in_array($k, ['password'])) continue;
+            $prev = $before[$k] ?? null;
+            $next = $after[$k] ?? null;
+            if ($prev != $next) {
+                $changed[$k] = ['before' => $prev, 'after' => $next];
+            }
+        }
+
+        AuditLogger::log($request, 'updated', 'TeacherProfile', $teacher->id, $teacher->name, $changed);
 
         return back()->with('success', 'Profile updated successfully!');
     }
@@ -67,6 +82,8 @@ class TeacherDashboardController extends Controller
         $teacher->update([
             'password' => Hash::make($request->new_password),
         ]);
+
+        AuditLogger::log($request, 'updated', 'TeacherPassword', $teacher->id, $teacher->name, ['password' => ['before' => '******', 'after' => '******']]);
 
         return back()->with('success', 'Password changed successfully!');
     }

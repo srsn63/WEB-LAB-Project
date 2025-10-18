@@ -459,24 +459,137 @@ section {
   border-color: rgba(96, 165, 250, 0.6);
 }
 
-/* Faculty Cards - Refined design */
+/* Faculty Section - COMPLETELY REDESIGNED */
 #faculty {
   background: var(--primary-dark);
 }
 
-.faculty-card {
-  border: none;
+.faculty-container {
+  position: relative;
+}
+
+.faculty-head-card {
+  background: rgba(10, 14, 39, 0.85);
+  backdrop-filter: blur(15px);
   border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 15px 50px rgba(59, 130, 246, 0.4),
+              0 0 40px rgba(96, 165, 250, 0.3),
+              inset 0 0 30px rgba(59, 130, 246, 0.1);
+  border: 2px solid rgba(96, 165, 250, 0.4);
+  margin-bottom: 3rem;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
   overflow: hidden;
+}
+
+.faculty-head-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.faculty-head-card:hover::before {
+  animation: cardShimmer 1.5s ease-in-out;
+  opacity: 1;
+}
+
+.faculty-head-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.5),
+              0 0 50px rgba(96, 165, 250, 0.4),
+              inset 0 0 50px rgba(59, 130, 246, 0.1);
+  border-color: rgba(96, 165, 250, 0.6);
+}
+
+.head-of-department {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.head-image {
+  flex: 0 0 180px;
+}
+
+.head-image img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(96, 165, 250, 0.5);
+  box-shadow: 0 0 30px rgba(96, 165, 250, 0.4);
+  transition: all 0.4s ease;
+}
+
+.faculty-head-card:hover .head-image img {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(96, 165, 250, 0.6);
+}
+
+.head-info {
+  flex: 1;
+}
+
+.head-info h3 {
+  color: var(--bright-blue);
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.head-info .designation {
+  color: var(--cyan);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.head-info .research {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.head-badge {
+  background: linear-gradient(135deg, var(--light-blue), var(--cyan));
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+/* Regular Faculty Cards */
+.faculty-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.faculty-card {
+  background: rgba(10, 14, 39, 0.85);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2rem;
   box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3),
               0 0 20px rgba(96, 165, 250, 0.2),
               inset 0 0 30px rgba(59, 130, 246, 0.05);
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  margin-bottom: 2rem;
-  background: rgba(30, 41, 59, 0.9);
-  backdrop-filter: blur(15px);
   border: 2px solid rgba(96, 165, 250, 0.3);
+  text-align: center;
   position: relative;
+  overflow: hidden;
 }
 
 .faculty-card::before {
@@ -503,64 +616,68 @@ section {
 }
 
 .faculty-card:hover {
-  transform: translateY(-12px) scale(1.02);
+  transform: translateY(-12px) scale(1.03);
   box-shadow: 0 20px 60px rgba(59, 130, 246, 0.5),
               0 0 40px rgba(96, 165, 250, 0.4),
               inset 0 0 50px rgba(59, 130, 246, 0.1);
   border-color: rgba(96, 165, 250, 0.6);
 }
 
-.faculty-img {
-  height: 280px;
+.faculty-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
   object-fit: cover;
-  transition: all 0.3s ease;
-  width: 100%;
+  border: 3px solid rgba(96, 165, 250, 0.4);
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 0 25px rgba(96, 165, 250, 0.3);
+  transition: all 0.4s ease;
 }
 
-.faculty-card:hover .faculty-img {
-  transform: scale(1.05);
+.faculty-card:hover .faculty-image {
+  transform: scale(1.08);
+  box-shadow: 0 0 35px rgba(96, 165, 250, 0.5);
 }
 
-.faculty-card .card-body {
-  padding: 2rem 1.5rem;
-  background: rgba(10, 14, 39, 0.9);
-}
-
-.faculty-card .card-title {
+.faculty-name {
   color: var(--bright-blue);
-  font-weight: 700;
   font-size: 1.4rem;
+  font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
-.faculty-card .card-text {
+.faculty-designation {
   color: var(--cyan);
-  font-weight: 600;
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
-.faculty-card .text-muted {
-  color: rgba(255, 255, 255, 0.6) !important;
+.faculty-research {
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
+  line-height: 1.5;
   margin-bottom: 1.5rem;
+  min-height: 60px;
 }
 
 .faculty-btn {
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
   color: var(--white);
   border: 2px solid rgba(96, 165, 250, 0.3);
-  padding: 0.9rem 2.3rem;
+  padding: 0.8rem 1.8rem;
   border-radius: 30px;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   box-shadow: 0 6px 25px rgba(59, 130, 246, 0.3),
               inset 0 0 15px rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
+  display: inline-block;
+  text-decoration: none;
 }
 
 .faculty-btn::before {
@@ -587,6 +704,8 @@ section {
   box-shadow: 0 12px 35px rgba(96, 165, 250, 0.6),
               0 0 25px rgba(6, 182, 212, 0.4);
   border-color: var(--cyan);
+  color: white;
+  text-decoration: none;
 }
 
 /* Students Section - Balanced cards */
@@ -1068,12 +1187,29 @@ html {
   .faculty-card, .student-card, .notice-item {
     margin-bottom: 1.5rem;
   }
+  
+  .head-of-department {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .head-image {
+    flex: 0 0 auto;
+  }
+  
+  .faculty-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 576px) {
   .hero-btn {
     padding: 1.2rem 2rem;
     font-size: 0.95rem;
+  }
+  
+  .faculty-head-card {
+    padding: 1.5rem;
   }
 }
   </style>
@@ -1145,59 +1281,51 @@ html {
         <h2>Our Faculty Members</h2>
         <p>Meet our distinguished faculty members</p>
       </div>
-      {{-- Faculty cards now draw from the teachers collection so the homepage always reflects current data. --}}
-      <div class="row g-4">
-        @forelse($teachers as $teacher)
-          @if($teacher->is_head)
-            <div class="col-12">
-              <div class="card faculty-card h-100 p-3" style="display:flex;align-items:center;gap:1.5rem;">
-                <img
-                  src="{{ $teacher->profile_image ?? 'https://ui-avatars.com/api/?name=' . urlencode($teacher->name) . '&background=1a2238&color=ffffff' }}"
-                  class="faculty-img img-fluid" style="width:140px;height:140px;border-radius:12px;object-fit:cover;"
-                  alt="{{ $teacher->name }}"
-                >
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <h4 class="card-title">{{ $teacher->name }}</h4>
-                      <p class="card-text">{{ $teacher->designation }} <span class="badge bg-info ms-2">Head of Department</span></p>
-                      <p class="text-muted">{{ $teacher->research_interests }}</p>
-                    </div>
-                    <div>
-                      <a href="{{ route('teachers.show', $teacher) }}" class="btn faculty-btn">View Profile</a>
-                    </div>
-                  </div>
-                </div>
+      
+      <div class="faculty-container">
+        @php
+          $head = isset($teachers) ? $teachers->firstWhere('is_head', true) : null;
+          $others = isset($teachers) ? $teachers->filter(function($t) { return !$t->is_head; }) : collect();
+        @endphp
+
+        @if($head)
+          <!-- Head of Department -->
+          <div class="faculty-head-card">
+            <div class="head-of-department">
+              <div class="head-image">
+                <img src="{{ $head->profile_image ?: 'https://via.placeholder.com/400x400?text=Profile' }}" alt="Head of Department">
               </div>
-            </div>
-          @else
-            <div class="col-md-4">
-              <div class="card faculty-card h-100">
-                <img
-                  src="{{ $teacher->profile_image ?? 'https://ui-avatars.com/api/?name=' . urlencode($teacher->name) . '&background=1a2238&color=ffffff' }}"
-                  class="card-img-top faculty-img"
-                  alt="{{ $teacher->name }}"
-                >
-                <div class="card-body text-center d-flex flex-column">
-                  <h5 class="card-title">{{ $teacher->name }}</h5>
-                  <p class="card-text">{{ $teacher->designation }}</p>
-                  <p class="text-muted">{{ $teacher->research_interests }}</p>
-                  <a href="{{ route('teachers.show', $teacher) }}" class="btn faculty-btn mt-auto">View Profile</a>
-                </div>
+              <div class="head-info">
+                <span class="head-badge">Head of Department</span>
+                <h3>{{ $head->name }}</h3>
+                <p class="designation">{{ $head->designation }}</p>
+                @if(!empty($head->research_interests))
+                  <p class="research">Research Interests: {{ $head->research_interests }}</p>
+                @endif
+                <a href="{{ route('teachers.show', $head) }}" class="faculty-btn">View Full Profile</a>
               </div>
-            </div>
-          @endif
-        @empty
-          <div class="col-12">
-            <div class="card faculty-card text-center p-5">
-              <h5 class="card-title">Faculty profiles coming soon</h5>
-              <p class="text-muted mb-0">We're curating detailed information about our respected teachers. Please check back shortly.</p>
             </div>
           </div>
-        @endforelse
-      </div>
-      <div class="text-center mt-5">
-        <a href="{{ route('teachers.index') }}" class="btn faculty-btn">View All Faculty Members</a>
+        @endif
+
+        <!-- Regular Faculty Grid -->
+        <div class="faculty-grid">
+          @foreach($others as $teacher)
+            <div class="faculty-card">
+              <img src="{{ $teacher->profile_image ?: 'https://via.placeholder.com/400x400?text=Profile' }}" alt="Faculty Member" class="faculty-image">
+              <h4 class="faculty-name">{{ $teacher->name }}</h4>
+              <p class="faculty-designation">{{ $teacher->designation }}</p>
+              @if(!empty($teacher->research_interests))
+                <p class="faculty-research">{{ $teacher->research_interests }}</p>
+              @endif
+              <a href="{{ route('teachers.show', $teacher) }}" class="faculty-btn">View Profile</a>
+            </div>
+          @endforeach
+        </div>
+        
+        <div class="text-center mt-5">
+          <a href="{{ route('teachers.index') }}" class="btn faculty-btn">View All Faculty Members</a>
+        </div>
       </div>
     </div>
   </section>
@@ -1247,20 +1375,20 @@ html {
         <div class="col-lg-8 mx-auto">
           @forelse($notices as $notice)
             <div class="notice-item">
-              <div class="notice-date">{{ $notice->created_at->format('F d, Y') }}</div>
+              <div class="notice-date">{{ optional($notice->created_at)->format('F j, Y') }}</div>
               <h5 class="notice-title">{{ $notice->title }}</h5>
               <p>
-                {{ $notice->preview }}
-                @if($notice->needsReadMore())
-                  <a href="{{ route('notices.show', $notice) }}" class="text-primary fw-semibold ms-2">Read More</a>
-                @endif
+                {{ \Illuminate\Support\Str::limit(strip_tags($notice->content), 180) }}
+                <a href="{{ route('notices.show', $notice) }}" class="text-primary fw-semibold ms-2">Read More</a>
               </p>
             </div>
           @empty
             <div class="notice-item">
-              <div class="notice-date">{{ now()->format('F d, Y') }}</div>
-              <h5 class="notice-title">No notices available</h5>
-              <p>Stay tuned for upcoming announcements and important updates from the department.</p>
+              <div class="notice-date">{{ now()->format('F j, Y') }}</div>
+              <h5 class="notice-title">No notices yet</h5>
+              <p>
+                Please check back later for updates from the department.
+              </p>
             </div>
           @endforelse
         </div>
@@ -1308,33 +1436,16 @@ html {
         <div class="col-lg-7">
           <div class="contact-form">
             <h4>Send us a Message</h4>
-            @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724;">
-              {{ session('success') }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            @endif
-            @if($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              <ul class="mb-0">
-                @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-              </ul>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            @endif
-            <form action="{{ route('contact.store') }}" method="POST">
-              @csrf
+            <form action="#" method="POST">
               <div class="row">
                 <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required>
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" required>
                 </div>
                 <div class="col-md-6">
-                  <input type="email" name="email" class="form-control" placeholder="Your Email" value="{{ old('email') }}" required>
+                  <input type="email" name="email" class="form-control" placeholder="Your Email" required>
                 </div>
               </div>
-              <textarea name="message" class="form-control" rows="5" placeholder="Your Message" required>{{ old('message') }}</textarea>
+              <textarea name="message" class="form-control" rows="5" placeholder="Your Message" required></textarea>
               <button type="submit" class="btn w-100">Send Message</button>
             </form>
           </div>
@@ -1449,6 +1560,7 @@ html {
     sr.reveal('.hero p, .hero-btn', { origin: 'bottom', delay: 300 });
     sr.reveal('.about-content', { origin: 'left' });
     sr.reveal('.about-img', { origin: 'right' });
+    sr.reveal('.faculty-head-card', { origin: 'top' });
     sr.reveal('.faculty-card', { interval: 200, origin: 'bottom' });
     sr.reveal('.student-card', { interval: 200, origin: 'bottom' });
     sr.reveal('.notice-item', { interval: 150, origin: 'left' });
@@ -1479,23 +1591,6 @@ html {
         }
       });
     });
-
-    // Show toast notification on success
-    @if(session('success'))
-    window.addEventListener('DOMContentLoaded', function() {
-      // Scroll to contact section
-      document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      // Auto dismiss alert after 5 seconds
-      setTimeout(function() {
-        const alert = document.querySelector('.alert');
-        if (alert) {
-          const bsAlert = new bootstrap.Alert(alert);
-          bsAlert.close();
-        }
-      }, 5000);
-    });
-    @endif
   </script>
 </body>
 </html>

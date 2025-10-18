@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
+use App\Services\AuditLogger;
 
 class AdminContactMessageController extends Controller
 {
@@ -24,6 +25,7 @@ class AdminContactMessageController extends Controller
         // Mark as read when viewed
         if (!$message->is_read) {
             $message->update(['is_read' => true]);
+            AuditLogger::log(request(), 'updated', 'ContactMessage', $message->id, $message->email, ['is_read' => ['before' => false, 'after' => true]]);
         }
         
         return view('admin.messages.show', compact('message'));
@@ -34,7 +36,8 @@ class AdminContactMessageController extends Controller
      */
     public function destroy(ContactMessage $message)
     {
-        $message->delete();
+    AuditLogger::log(request(), 'deleted', 'ContactMessage', $message->id, $message->email, null);
+    $message->delete();
         return redirect()->route('admin.messages.index')->with('status', 'Message deleted successfully.');
     }
 }

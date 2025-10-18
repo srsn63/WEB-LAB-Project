@@ -6,6 +6,7 @@ use App\Models\Notice;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Services\AuditLogger;
 
 class AdminNoticeController extends Controller
 {
@@ -19,7 +20,8 @@ class AdminNoticeController extends Controller
             'content' => ['required', 'string'],
         ]);
 
-        Notice::create($data);
+    $notice = Notice::create($data);
+    AuditLogger::log($request, 'created', 'Notice', $notice->id, $notice->title, null);
 
         return redirect()
             ->route('admin.dashboard')
@@ -44,7 +46,18 @@ class AdminNoticeController extends Controller
             'content' => ['required', 'string'],
         ]);
 
+        $before = $notice->getOriginal();
         $notice->update($data);
+        $after = $notice->fresh()->toArray();
+        $changed = [];
+        foreach ($data as $k => $v) {
+            $prev = $before[$k] ?? null;
+            $next = $after[$k] ?? null;
+            if ($prev != $next) {
+                $changed[$k] = ['before' => $prev, 'after' => $next];
+            }
+        }
+        AuditLogger::log($request, 'updated', 'Notice', $notice->id, $notice->title, $changed);
 
         return redirect()
             ->route('admin.dashboard')
@@ -56,7 +69,8 @@ class AdminNoticeController extends Controller
      */
     public function destroy(Notice $notice): RedirectResponse
     {
-        $noticeTitle = $notice->title;
+    $noticeTitle = $notice->title;
+    AuditLogger::log(request(), 'deleted', 'Notice', $notice->id, $noticeTitle, null);
         $notice->delete();
 
         return redirect()

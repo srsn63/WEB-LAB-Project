@@ -1,0 +1,6 @@
+Add teacher self-service image uploads with resizing/cropping.
+Implement teacher-specific notifications (new notices, contact messages).
+Build analytics dashboards for admin (faculty stats, notice engagement).
+Introduce role-based announcements or messaging from admin to teachers.
+Provide audit logs of profile edits and notice changes.
+Create student view with course catalog and faculty filters.

@@ -10,6 +10,7 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherAuthController;
 use App\Http\Controllers\TeacherDashboardController;
+use App\Http\Controllers\AdminAuditLogController;
 use App\Models\Notice;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/messages', [AdminContactMessageController::class, 'index'])->name('messages.index');
         Route::get('/messages/{message}', [AdminContactMessageController::class, 'show'])->name('messages.show');
         Route::delete('/messages/{message}', [AdminContactMessageController::class, 'destroy'])->name('messages.destroy');
+
+        // Audit logs
+        Route::get('/audit-logs', [AdminAuditLogController::class, 'index'])->name('audit.index');
     });
 });
 

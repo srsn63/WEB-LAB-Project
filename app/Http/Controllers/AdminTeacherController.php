@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+use App\Services\AuditLogger;
 
 class AdminTeacherController extends Controller
 {
@@ -52,7 +53,7 @@ class AdminTeacherController extends Controller
             Teacher::where('is_head', true)->update(['is_head' => false]);
         }
 
-        Teacher::create([
+        $created = Teacher::create([
             'name' => $data['name'],
             'is_head' => $isHead,
             'designation' => $data['designation'],
@@ -71,6 +72,8 @@ class AdminTeacherController extends Controller
             'courses' => $this->splitToArray($data['courses'] ?? null),
             'publications' => $data['publications'] ?? null,
         ]);
+
+        AuditLogger::log($request, 'created', 'Teacher', $created->id, $created->name, null);
 
         return redirect()
             ->route('admin.dashboard')
@@ -149,7 +152,27 @@ class AdminTeacherController extends Controller
             $updateData['password'] = Hash::make($data['password']);
         }
 
+        $before = $teacher->getOriginal();
         $teacher->update($updateData);
+        $after = $teacher->fresh()->toArray();
+
+        // Build a simple diff of changed scalar fields
+        $changed = [];
+        foreach ($updateData as $k => $v) {
+            $prev = $before[$k] ?? null;
+            $next = $after[$k] ?? null;
+            if ($k === 'password') { // don't log raw passwords
+                if (!empty($v)) {
+                    $changed[$k] = ['before' => '******', 'after' => '******'];
+                }
+                continue;
+            }
+            if ($prev != $next) {
+                $changed[$k] = ['before' => $prev, 'after' => $next];
+            }
+        }
+
+        AuditLogger::log($request, 'updated', 'Teacher', $teacher->id, $teacher->name, $changed);
 
         return redirect()
             ->route('admin.dashboard')
@@ -161,7 +184,8 @@ class AdminTeacherController extends Controller
      */
     public function destroy(Teacher $teacher): RedirectResponse
     {
-        $teacherName = $teacher->name;
+    $teacherName = $teacher->name;
+    AuditLogger::log(request(), 'deleted', 'Teacher', $teacher->id, $teacherName, null);
         $teacher->delete();
 
         return redirect()
