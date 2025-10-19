@@ -678,6 +678,8 @@ section {
   overflow: hidden;
   display: inline-block;
   text-decoration: none;
+  cursor: pointer;
+  z-index: 10;
 }
 
 .faculty-btn::before {
@@ -1350,7 +1352,7 @@ html {
             <i class="bi bi-book-half"></i>
             <h4>Academic Resources</h4>
             <p>Find course materials, syllabi, and academic calendars for your program.</p>
-            <button class="btn faculty-btn">View Resources</button>
+            <a href="{{ route('academic-resources.index') }}" class="btn faculty-btn">View Resources</a>
           </div>
         </div>
         <div class="col-md-4">
