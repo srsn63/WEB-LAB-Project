@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use App\Services\AuditLogger;
 
 class AdminTeacherController extends Controller
@@ -74,6 +75,9 @@ class AdminTeacherController extends Controller
         ]);
 
         AuditLogger::log($request, 'created', 'Teacher', $created->id, $created->name, null);
+
+        // Clear homepage cache since teacher data changed
+        Cache::forget('homepage_teachers');
 
         return redirect()
             ->route('admin.dashboard')
@@ -174,6 +178,9 @@ class AdminTeacherController extends Controller
 
         AuditLogger::log($request, 'updated', 'Teacher', $teacher->id, $teacher->name, $changed);
 
+        // Clear homepage cache since teacher data changed
+        Cache::forget('homepage_teachers');
+
         return redirect()
             ->route('admin.dashboard')
             ->with('status', 'Teacher profile updated successfully.');
@@ -187,6 +194,9 @@ class AdminTeacherController extends Controller
     $teacherName = $teacher->name;
     AuditLogger::log(request(), 'deleted', 'Teacher', $teacher->id, $teacherName, null);
         $teacher->delete();
+
+        // Clear homepage cache since teacher data changed
+        Cache::forget('homepage_teachers');
 
         return redirect()
             ->route('admin.dashboard')

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AcademicResource extends Model
 {
     protected $fillable = [
+        'batch_id',
         'title',
         'category',
         'description',
@@ -35,5 +36,13 @@ class AcademicResource extends Model
     public function scopeCategory($query, $category)
     {
         return $query->where('category', $category);
+    }
+
+    /**
+     * Get the batch this resource belongs to
+     */
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
     }
 }

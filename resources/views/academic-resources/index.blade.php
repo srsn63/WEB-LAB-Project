@@ -207,6 +207,41 @@
         .back-to-top.show {
             display: flex;
         }
+        
+        .batch-selector {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .batch-btn {
+            background: rgba(30, 41, 59, 0.8);
+            color: #94a3b8;
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .batch-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .batch-btn.active {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -233,8 +268,18 @@
             <h1>Academic Resources</h1>
             <p>Find course materials, syllabi, and academic calendars for your program</p>
             
+            <!-- Batch Selector -->
+            <div class="batch-selector mt-4">
+                @foreach($batches as $batch)
+                    <a href="{{ route('academic-resources.index', ['batch_id' => $batch->id]) }}" 
+                       class="batch-btn {{ $selectedBatch && $selectedBatch->id == $batch->id ? 'active' : '' }}">
+                        {{ $batch->name }}
+                    </a>
+                @endforeach
+            </div>
+            
             <!-- Navigation Menu -->
-            <div class="resource-nav mt-4">
+            <div class="resource-nav mt-3">
                 <a href="#course-materials" class="nav-link-btn active">
                     <i class="bi bi-folder-fill"></i> Course Materials
                 </a>

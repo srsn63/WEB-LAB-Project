@@ -6,6 +6,7 @@ use App\Models\Notice;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Cache;
 use App\Services\AuditLogger;
 
 class AdminNoticeController extends Controller
@@ -22,6 +23,9 @@ class AdminNoticeController extends Controller
 
     $notice = Notice::create($data);
     AuditLogger::log($request, 'created', 'Notice', $notice->id, $notice->title, null);
+
+        // Clear homepage cache since notice data changed
+        Cache::forget('homepage_notices');
 
         return redirect()
             ->route('admin.dashboard')
@@ -59,6 +63,9 @@ class AdminNoticeController extends Controller
         }
         AuditLogger::log($request, 'updated', 'Notice', $notice->id, $notice->title, $changed);
 
+        // Clear homepage cache since notice data changed
+        Cache::forget('homepage_notices');
+
         return redirect()
             ->route('admin.dashboard')
             ->with('status', 'Notice updated successfully.');
@@ -72,6 +79,9 @@ class AdminNoticeController extends Controller
     $noticeTitle = $notice->title;
     AuditLogger::log(request(), 'deleted', 'Notice', $notice->id, $noticeTitle, null);
         $notice->delete();
+
+        // Clear homepage cache since notice data changed
+        Cache::forget('homepage_notices');
 
         return redirect()
             ->route('admin.dashboard')

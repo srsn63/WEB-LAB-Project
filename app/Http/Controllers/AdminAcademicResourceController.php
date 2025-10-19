@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicResource;
+use App\Models\Batch;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,8 +16,9 @@ class AdminAcademicResourceController extends Controller
      */
     public function index(): View
     {
-        $resources = AcademicResource::orderByDesc('created_at')->paginate(15);
-        return view('admin.academic-resources.index', compact('resources'));
+        $resources = AcademicResource::with('batch')->orderByDesc('created_at')->paginate(15);
+        $batches = Batch::sorted('desc')->get();
+        return view('admin.academic-resources.index', compact('resources', 'batches'));
     }
 
     /**
@@ -25,6 +27,7 @@ class AdminAcademicResourceController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
+            'batch_id' => ['required', 'exists:batches,id'],
             'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'string', 'in:course_material,syllabus,academic_calendar'],
             'description' => ['nullable', 'string'],
@@ -51,7 +54,8 @@ class AdminAcademicResourceController extends Controller
      */
     public function edit(AcademicResource $resource): View
     {
-        return view('admin.academic-resources.edit', compact('resource'));
+        $batches = Batch::sorted('desc')->get();
+        return view('admin.academic-resources.edit', compact('resource', 'batches'));
     }
 
     /**
@@ -60,6 +64,7 @@ class AdminAcademicResourceController extends Controller
     public function update(Request $request, AcademicResource $resource): RedirectResponse
     {
         $data = $request->validate([
+            'batch_id' => ['required', 'exists:batches,id'],
             'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'string', 'in:course_material,syllabus,academic_calendar'],
             'description' => ['nullable', 'string'],

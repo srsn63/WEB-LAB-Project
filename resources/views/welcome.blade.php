@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Department of Computer Science & Engineering - KUET</title>
+  <!-- Preconnect to external domains for faster loading -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://images.unsplash.com">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1295,7 +1301,7 @@ html {
           <div class="faculty-head-card">
             <div class="head-of-department">
               <div class="head-image">
-                <img src="{{ $head->profile_image ?: 'https://via.placeholder.com/400x400?text=Profile' }}" alt="Head of Department">
+                <img src="{{ $head->profile_image ?: 'https://via.placeholder.com/400x400?text=Profile' }}" alt="Head of Department" loading="lazy">
               </div>
               <div class="head-info">
                 <span class="head-badge">Head of Department</span>
@@ -1314,7 +1320,7 @@ html {
         <div class="faculty-grid">
           @foreach($others as $teacher)
             <div class="faculty-card">
-              <img src="{{ $teacher->profile_image ?: 'https://via.placeholder.com/400x400?text=Profile' }}" alt="Faculty Member" class="faculty-image">
+              <img src="{{ $teacher->profile_image ?: 'https://via.placeholder.com/400x400?text=Profile' }}" alt="Faculty Member" class="faculty-image" loading="lazy">
               <h4 class="faculty-name">{{ $teacher->name }}</h4>
               <p class="faculty-designation">{{ $teacher->designation }}</p>
               @if(!empty($teacher->research_interests))
@@ -1344,7 +1350,7 @@ html {
             <i class="bi bi-people-fill"></i>
             <h4>Student Portal</h4>
             <p>Access academic records, course registration, and other student services.</p>
-            <button class="btn faculty-btn">Access Portal</button>
+            <a href="{{ route('student.login') }}" class="btn faculty-btn">Access Portal</a>
           </div>
         </div>
         <div class="col-md-4">
@@ -1510,9 +1516,9 @@ html {
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/scrollreveal"></script>
-  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://unpkg.com/scrollreveal" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12" defer></script>
   <script>
     const backToTopButton = document.querySelector('.back-to-top');
     

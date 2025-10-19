@@ -431,6 +431,136 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Batch Management Quick Link -->
+                        <div class="mt-4 pt-3" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong style="color: #60a5fa;"><i class="bi bi-calendar2-range me-2"></i>Batch Management</strong>
+                                    <p class="mb-0 small text-muted">Manage batches ({{ \App\Models\Batch::count() }} total) - organize resources by year</p>
+                                </div>
+                                <a href="{{ route('admin.batches.index') }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-gear me-1"></i> Manage Batches
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Management Section -->
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body p-0">
+                    <div class="form-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h2 class="card-title h4 mb-1">Manage Students</h2>
+                                <p class="section-note mb-0">Add and manage student accounts for the portal</p>
+                            </div>
+                            <a href="{{ route('admin.students.index') }}" class="btn btn-primary">
+                                <i class="bi bi-people-fill me-1"></i> Full Management Panel
+                            </a>
+                        </div>
+                        
+                        <div class="row g-4 mt-2">
+                            <!-- Quick Stats by Batch -->
+                            @foreach(\App\Models\Batch::sorted('desc')->get() as $batch)
+                            <div class="col-md-2">
+                                <div class="stat-card">
+                                    <i class="bi bi-person-badge text-primary" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Student::where('batch', $batch->name)->count() }}</h3>
+                                    <p>{{ $batch->name }} Students</p>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Courses Section -->
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body p-0">
+                    <div class="form-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h2 class="card-title h4 mb-1">Manage Courses</h2>
+                                <p class="section-note mb-0">Add and manage courses for each semester</p>
+                            </div>
+                            <a href="{{ route('admin.courses.index') }}" class="btn btn-primary">
+                                <i class="bi bi-book-fill me-1"></i> Full Course Management
+                            </a>
+                        </div>
+                        
+                        <div class="row g-4 mt-2">
+                            <!-- Quick Stats by Semester -->
+                            @foreach(['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', '4-1', '4-2'] as $semester)
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-journal-code text-success" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Course::where('semester', $semester)->count() }}</h3>
+                                    <p>Semester {{ $semester }}</p>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Results Section -->
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body p-0">
+                    <div class="form-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h2 class="card-title h4 mb-1">Manage Student Results</h2>
+                                <p class="section-note mb-0">Add and manage student results/grades for each semester</p>
+                            </div>
+                            <a href="{{ route('admin.results.index') }}" class="btn btn-primary">
+                                <i class="bi bi-clipboard-data-fill me-1"></i> Full Results Management
+                            </a>
+                        </div>
+                        
+                        <div class="row g-4 mt-2">
+                            <!-- Quick Stats -->
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-mortarboard text-warning" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\StudentResult::distinct('student_id')->count('student_id') }}</h3>
+                                    <p>Students with Results</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-file-earmark-text text-info" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\StudentResult::count() }}</h3>
+                                    <p>Total Results</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-award text-success" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\StudentResult::whereIn('grade', ['A+', 'A'])->count() }}</h3>
+                                    <p>A/A+ Grades</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-exclamation-triangle text-danger" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\StudentResult::where('grade', 'F')->count() }}</h3>
+                                    <p>Failed Results</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -439,3 +569,4 @@
 </div>
 </body>
 </html>
+

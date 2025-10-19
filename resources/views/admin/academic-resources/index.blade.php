@@ -67,6 +67,19 @@
                     <form method="POST" action="{{ route('admin.academic-resources.store') }}">
                         @csrf
                         <div class="mb-3">
+                            <label class="form-label">Batch *</label>
+                            <select name="batch_id" class="form-select @error('batch_id') is-invalid @enderror" required>
+                                <option value="">Select Batch</option>
+                                @foreach($batches as $batch)
+                                    <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
+                                        {{ $batch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('batch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Title *</label>
                             <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title') }}" required>
                             @error('title')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -126,6 +139,7 @@
                             <thead>
                                 <tr>
                                     <th>Title</th>
+                                    <th>Batch</th>
                                     <th>Category</th>
                                     <th>Course</th>
                                     <th>Status</th>
@@ -138,6 +152,9 @@
                                         <td>
                                             <div class="fw-semibold">{{ $resource->title }}</div>
                                             <small class="text-muted">{{ $resource->created_at->format('M d, Y') }}</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ $resource->batch?->name ?? 'N/A' }}</span>
                                         </td>
                                         <td>
                                             <span class="badge-cat">

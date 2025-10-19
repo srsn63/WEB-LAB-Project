@@ -44,6 +44,19 @@
                         @method('PUT')
 
                         <div class="mb-3">
+                            <label class="form-label">Batch *</label>
+                            <select name="batch_id" class="form-select @error('batch_id') is-invalid @enderror" required>
+                                <option value="">Select Batch</option>
+                                @foreach($batches as $batch)
+                                    <option value="{{ $batch->id }}" {{ old('batch_id', $resource->batch_id) == $batch->id ? 'selected' : '' }}>
+                                        {{ $batch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('batch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Title *</label>
                             <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title', $resource->title) }}" required>
                             @error('title')<div class="invalid-feedback">{{ $message }}</div>@enderror

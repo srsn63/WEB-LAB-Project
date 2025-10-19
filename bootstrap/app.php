@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AdminAuthenticate;
 use App\Http\Middleware\TeacherAuthenticate;
+use App\Http\Middleware\StudentAuthenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.auth' => AdminAuthenticate::class,
             'teacher.auth' => TeacherAuthenticate::class,
+            'student.auth' => StudentAuthenticate::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

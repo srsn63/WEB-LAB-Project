@@ -2,26 +2,44 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminContactMessageController;
+use App\Http\Controllers\AdminCourseController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminNoticeController;
+use App\Http\Controllers\AdminResultController;
 use App\Http\Controllers\AdminTeacherController;
+use App\Http\Controllers\AdminStudentController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherAuthController;
 use App\Http\Controllers\TeacherDashboardController;
+use App\Http\Controllers\StudentAuthController;
+use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\AdminAuditLogController;
 use App\Http\Controllers\AcademicResourceController;
 use App\Http\Controllers\AdminAcademicResourceController;
+use App\Http\Controllers\AdminBatchController;
 use App\Models\Notice;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cache;
 
 Route::get('/', function () {
-    // Surface a curated selection of teachers for the landing page cards.
-    $teachers = Teacher::ordered()->take(3)->get();
-    // Get recent notices for the home page.
-    $notices = Notice::orderByDesc('created_at')->take(5)->get();
+    // Cache teachers for 1 hour to improve performance
+    $teachers = Cache::remember('homepage_teachers', 3600, function () {
+        return Teacher::select('id', 'name', 'designation', 'profile_image', 'short_bio', 'research_interests', 'is_head')
+            ->ordered()
+            ->take(3)
+            ->get();
+    });
+    
+    // Cache notices for 30 minutes to improve performance
+    $notices = Cache::remember('homepage_notices', 1800, function () {
+        return Notice::select('id', 'title', 'content', 'created_at')
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->get();
+    });
 
     return view('welcome', compact('teachers', 'notices'));
 })->name('home');
@@ -72,6 +90,32 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/academic-resources/{resource}/edit', [AdminAcademicResourceController::class, 'edit'])->name('academic-resources.edit');
         Route::put('/academic-resources/{resource}', [AdminAcademicResourceController::class, 'update'])->name('academic-resources.update');
         Route::delete('/academic-resources/{resource}', [AdminAcademicResourceController::class, 'destroy'])->name('academic-resources.destroy');
+        
+        // Batch management
+        Route::get('/batches', [AdminBatchController::class, 'index'])->name('batches.index');
+        Route::post('/batches', [AdminBatchController::class, 'store'])->name('batches.store');
+        Route::delete('/batches/{batch}', [AdminBatchController::class, 'destroy'])->name('batches.destroy');
+        
+        // Student management
+        Route::get('/students', [AdminStudentController::class, 'index'])->name('students.index');
+        Route::post('/students', [AdminStudentController::class, 'store'])->name('students.store');
+        Route::get('/students/{student}/edit', [AdminStudentController::class, 'edit'])->name('students.edit');
+        Route::put('/students/{student}', [AdminStudentController::class, 'update'])->name('students.update');
+        Route::delete('/students/{student}', [AdminStudentController::class, 'destroy'])->name('students.destroy');
+        
+        // Course management
+        Route::get('/courses', [AdminCourseController::class, 'index'])->name('courses.index');
+        Route::post('/courses', [AdminCourseController::class, 'store'])->name('courses.store');
+        Route::get('/courses/{course}/edit', [AdminCourseController::class, 'edit'])->name('courses.edit');
+        Route::put('/courses/{course}', [AdminCourseController::class, 'update'])->name('courses.update');
+        Route::delete('/courses/{course}', [AdminCourseController::class, 'destroy'])->name('courses.destroy');
+        
+        // Result management
+        Route::get('/results', [AdminResultController::class, 'index'])->name('results.index');
+        Route::post('/results', [AdminResultController::class, 'store'])->name('results.store');
+        Route::get('/results/{result}/edit', [AdminResultController::class, 'edit'])->name('results.edit');
+        Route::put('/results/{result}', [AdminResultController::class, 'update'])->name('results.update');
+        Route::delete('/results/{result}', [AdminResultController::class, 'destroy'])->name('results.destroy');
     });
 });
 
@@ -85,5 +129,19 @@ Route::prefix('teacher')->name('teacher.')->group(function () {
         Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
         Route::put('/profile', [TeacherDashboardController::class, 'updateProfile'])->name('profile.update');
         Route::put('/password', [TeacherDashboardController::class, 'changePassword'])->name('password.change');
+    });
+});
+
+// Student authentication and dashboard routes
+Route::prefix('student')->name('student.')->group(function () {
+    Route::get('/login', [StudentAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [StudentAuthController::class, 'login']);
+    Route::post('/logout', [StudentAuthController::class, 'logout'])->name('logout');
+
+    Route::middleware('student.auth')->group(function () {
+        Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/courses', [StudentDashboardController::class, 'courses'])->name('courses');
+        Route::put('/profile', [StudentDashboardController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/password', [StudentDashboardController::class, 'changePassword'])->name('password.change');
     });
 });
