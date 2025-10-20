@@ -450,6 +450,59 @@
         </div>
     </div>
 
+    <!-- Career Opportunities Management Section -->
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body p-0">
+                    <div class="form-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h2 class="card-title h4 mb-1">Manage Career Opportunities</h2>
+                                <p class="section-note mb-0">Post internships and job opportunities for students</p>
+                            </div>
+                            <a href="{{ route('admin.career-opportunities.index') }}" class="btn btn-primary">
+                                <i class="bi bi-gear-fill me-1"></i> Full Management Panel
+                            </a>
+                        </div>
+                        
+                        <div class="row g-4 mt-2">
+                            <!-- Quick Stats -->
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-briefcase-fill text-primary" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\CareerOpportunity::where('is_active', true)->count() }}</h3>
+                                    <p>Active Opportunities</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-award-fill text-success" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\CareerOpportunity::where('job_type', 'internship')->where('is_active', true)->count() }}</h3>
+                                    <p>Internships</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-file-earmark-check-fill text-info" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\CareerOpportunity::where('job_type', 'full-time')->where('is_active', true)->count() }}</h3>
+                                    <p>Full-Time Jobs</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-clock-fill text-warning" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\CareerOpportunity::where('job_type', 'part-time')->where('is_active', true)->count() }}</h3>
+                                    <p>Part-Time Jobs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Student Management Section -->
     <div class="row g-4 mt-4">
         <div class="col-12">

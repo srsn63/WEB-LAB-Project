@@ -49,17 +49,10 @@
         @endif
 
         <!-- Info Banner -->
-        <div class="alert alert-info mb-4" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #93c5fd;">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-info-circle-fill me-2" style="font-size: 1.5rem;"></i>
-                <div>
-                    <strong>Manage Academic Resources</strong><br>
-                    <small>Add course materials, syllabi, and academic calendars. Students can access them from the Academic Resources page.</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="row g-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Manage Academic Resources</h5>
+                    <small>Add course materials, syllabi, academic calendars, and class routines. Students can access them from the Academic Resources page.</small>
+                </div>        <div class="row g-4">
             <!-- Add Resource Form -->
             <div class="col-lg-5">
                 <div class="card p-4">
@@ -87,11 +80,12 @@
 
                         <div class="mb-3">
                             <label class="form-label">Category *</label>
-                            <select name="category" class="form-select @error('category') is-invalid @enderror" required>
+                            <select name="category" id="category" class="form-select @error('category') is-invalid @enderror" required onchange="toggleCategoryFields()">
                                 <option value="">Select Category</option>
                                 <option value="course_material" {{ old('category') == 'course_material' ? 'selected' : '' }}>Course Material</option>
                                 <option value="syllabus" {{ old('category') == 'syllabus' ? 'selected' : '' }}>Syllabus</option>
                                 <option value="academic_calendar" {{ old('category') == 'academic_calendar' ? 'selected' : '' }}>Academic Calendar</option>
+                                <option value="class_routine" {{ old('category') == 'class_routine' ? 'selected' : '' }}>Class Routine</option>
                             </select>
                             @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
@@ -104,7 +98,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">File URL</label>
-                            <input type="url" name="file_url" class="form-control @error('file_url') is-invalid @enderror" value="{{ old('file_url') }}" placeholder="https://...">
+                            <input type="url" name="file_url" id="file_url" class="form-control @error('file_url') is-invalid @enderror" value="{{ old('file_url') }}" placeholder="https://...">
                             @error('file_url')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
@@ -214,15 +208,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Show/hide Course Code field based on category selection
+        // Show/hide fields based on category selection
         const categorySelect = document.querySelector('select[name="category"]');
         const courseCodeField = document.getElementById('courseCodeField');
         
-        function toggleCourseCodeField() {
+        function toggleCategoryFields() {
             const selectedCategory = categorySelect.value;
-            if (selectedCategory === 'academic_calendar') {
+            
+            // Handle course code field - hide for academic_calendar and class_routine
+            if (selectedCategory === 'academic_calendar' || selectedCategory === 'class_routine') {
                 courseCodeField.style.display = 'none';
-                // Clear the course code input when hidden
                 courseCodeField.querySelector('input').value = '';
             } else {
                 courseCodeField.style.display = 'block';
@@ -230,10 +225,10 @@
         }
         
         // Run on page load
-        toggleCourseCodeField();
+        toggleCategoryFields();
         
         // Run when category changes
-        categorySelect.addEventListener('change', toggleCourseCodeField);
+        categorySelect.addEventListener('change', toggleCategoryFields);
     </script>
 </body>
 </html>

@@ -1366,7 +1366,7 @@ html {
             <i class="bi bi-briefcase-fill"></i>
             <h4>Career Services</h4>
             <p>Explore internship opportunities, job placements, and career guidance.</p>
-            <button class="btn faculty-btn">Learn More</button>
+            <a href="{{ route('career-opportunities.index') }}" class="btn faculty-btn">Browse Opportunities</a>
           </div>
         </div>
       </div>

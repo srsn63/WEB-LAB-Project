@@ -305,7 +305,7 @@
     <div class="page-header">
         <div class="container">
             <h1>Academic Resources</h1>
-            <p>Find course materials, syllabi, and academic calendars for your program</p>
+            <p>Find course materials, syllabi, academic calendars, and class routines for your program</p>
             
             <!-- Batch Selector -->
             <div class="batch-selector mt-4">
@@ -342,6 +342,9 @@
                 </a>
                 <a href="#academic-calendars" class="nav-link-btn">
                     <i class="bi bi-calendar-event-fill"></i> Academic Calendars
+                </a>
+                <a href="#class-routines" class="nav-link-btn">
+                    <i class="bi bi-clock-fill"></i> Class Routine
                 </a>
             </div>
         </div>
@@ -471,6 +474,45 @@
                 <div class="empty-state">
                     <i class="bi bi-calendar-x"></i>
                     <p>No academic calendars available at the moment.</p>
+                </div>
+            @endforelse
+        </section>
+
+        <!-- Class Routines Section -->
+        <section id="class-routines" class="mb-5">
+            <h2 class="section-title">
+                <i class="bi bi-clock-fill me-2"></i>Class Routine
+            </h2>
+            @forelse($classRoutines as $routine)
+                <div class="resource-card">
+                    <h5>{{ $routine->title }}</h5>
+                    @if($routine->description)
+                        <p>{{ $routine->description }}</p>
+                    @endif
+                    <div class="resource-meta">
+                        @if($routine->semester)
+                            <span class="resource-badge">
+                                <i class="bi bi-calendar3"></i> Semester {{ $routine->semester }}
+                            </span>
+                        @endif
+                        @if($routine->batch)
+                            <span class="resource-badge">
+                                <i class="bi bi-people-fill"></i> {{ $routine->batch->name }}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="d-flex gap-3">
+                        @if($routine->file_url)
+                            <a href="{{ $routine->file_url }}" target="_blank" class="resource-link">
+                                <i class="bi bi-link-45deg"></i> View Routine
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="empty-state">
+                    <i class="bi bi-clock"></i>
+                    <p>No class routines available at the moment.</p>
                 </div>
             @endforelse
         </section>

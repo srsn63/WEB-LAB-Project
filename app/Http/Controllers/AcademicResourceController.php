@@ -39,23 +39,30 @@ class AcademicResourceController extends Controller
         $academicCalendarsQuery = AcademicResource::active()
             ->where('batch_id', $selectedBatchId)
             ->category('academic_calendar');
+        
+        $classRoutinesQuery = AcademicResource::active()
+            ->where('batch_id', $selectedBatchId)
+            ->category('class_routine');
 
         // Apply semester filter if selected
         if ($selectedSemester) {
             $courseMaterialsQuery->where('semester', $selectedSemester);
             $syllabiQuery->where('semester', $selectedSemester);
             $academicCalendarsQuery->where('semester', $selectedSemester);
+            $classRoutinesQuery->where('semester', $selectedSemester);
         }
 
         // Get results
         $courseMaterials = $courseMaterialsQuery->orderByDesc('created_at')->get();
         $syllabi = $syllabiQuery->orderByDesc('created_at')->get();
         $academicCalendars = $academicCalendarsQuery->orderByDesc('created_at')->get();
+        $classRoutines = $classRoutinesQuery->orderByDesc('created_at')->get();
 
         return view('academic-resources.index', compact(
             'courseMaterials', 
             'syllabi', 
-            'academicCalendars', 
+            'academicCalendars',
+            'classRoutines',
             'batches', 
             'selectedBatch',
             'semesters',

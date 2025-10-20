@@ -64,11 +64,12 @@
 
                         <div class="mb-3">
                             <label class="form-label">Category *</label>
-                            <select name="category" class="form-select @error('category') is-invalid @enderror" required>
+                            <select name="category" id="category" class="form-select @error('category') is-invalid @enderror" required onchange="toggleCategoryFields()">
                                 <option value="">Select Category</option>
                                 <option value="course_material" {{ old('category', $resource->category) == 'course_material' ? 'selected' : '' }}>Course Material</option>
                                 <option value="syllabus" {{ old('category', $resource->category) == 'syllabus' ? 'selected' : '' }}>Syllabus</option>
                                 <option value="academic_calendar" {{ old('category', $resource->category) == 'academic_calendar' ? 'selected' : '' }}>Academic Calendar</option>
+                                <option value="class_routine" {{ old('category', $resource->category) == 'class_routine' ? 'selected' : '' }}>Class Routine</option>
                             </select>
                             @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
@@ -81,7 +82,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">File URL</label>
-                            <input type="url" name="file_url" class="form-control @error('file_url') is-invalid @enderror" value="{{ old('file_url', $resource->file_url) }}" placeholder="https://...">
+                            <input type="url" name="file_url" id="file_url" class="form-control @error('file_url') is-invalid @enderror" value="{{ old('file_url', $resource->file_url) }}" placeholder="https://...">
                             @error('file_url')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
@@ -124,15 +125,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Show/hide Course Code field based on category selection
+        // Show/hide fields based on category selection
         const categorySelect = document.querySelector('select[name="category"]');
         const courseCodeField = document.getElementById('courseCodeField');
         
-        function toggleCourseCodeField() {
+        function toggleCategoryFields() {
             const selectedCategory = categorySelect.value;
-            if (selectedCategory === 'academic_calendar') {
+            
+            // Handle course code field - hide for academic_calendar and class_routine
+            if (selectedCategory === 'academic_calendar' || selectedCategory === 'class_routine') {
                 courseCodeField.style.display = 'none';
-                // Clear the course code input when hidden
                 courseCodeField.querySelector('input').value = '';
             } else {
                 courseCodeField.style.display = 'block';
@@ -140,10 +142,10 @@
         }
         
         // Run on page load
-        toggleCourseCodeField();
+        toggleCategoryFields();
         
         // Run when category changes
-        categorySelect.addEventListener('change', toggleCourseCodeField);
+        categorySelect.addEventListener('change', toggleCategoryFields);
     </script>
 </body>
 </html>

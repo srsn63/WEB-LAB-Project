@@ -29,10 +29,9 @@ class AdminAcademicResourceController extends Controller
         $data = $request->validate([
             'batch_id' => ['required', 'exists:batches,id'],
             'title' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:course_material,syllabus,academic_calendar'],
+            'category' => ['required', 'string', 'in:course_material,syllabus,academic_calendar,class_routine'],
             'description' => ['nullable', 'string'],
             'file_url' => ['nullable', 'url'],
-            'external_link' => ['nullable', 'url'],
             'course_code' => ['nullable', 'string', 'max:50'],
             'semester' => ['nullable', 'string', 'max:50'],
             'is_active' => ['nullable', 'boolean'],
@@ -66,10 +65,9 @@ class AdminAcademicResourceController extends Controller
         $data = $request->validate([
             'batch_id' => ['required', 'exists:batches,id'],
             'title' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:course_material,syllabus,academic_calendar'],
+            'category' => ['required', 'string', 'in:course_material,syllabus,academic_calendar,class_routine'],
             'description' => ['nullable', 'string'],
             'file_url' => ['nullable', 'url'],
-            'external_link' => ['nullable', 'url'],
             'course_code' => ['nullable', 'string', 'max:50'],
             'semester' => ['nullable', 'string', 'max:50'],
             'is_active' => ['nullable', 'boolean'],

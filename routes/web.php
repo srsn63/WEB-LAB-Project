@@ -19,6 +19,8 @@ use App\Http\Controllers\AdminAuditLogController;
 use App\Http\Controllers\AcademicResourceController;
 use App\Http\Controllers\AdminAcademicResourceController;
 use App\Http\Controllers\AdminBatchController;
+use App\Http\Controllers\CareerOpportunityController;
+use App\Http\Controllers\AdminCareerOpportunityController;
 use App\Models\Notice;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +54,10 @@ Route::get('/notices/{notice}', [NoticeController::class, 'show'])->name('notice
 
 // Academic Resources - Public facing
 Route::get('/academic-resources', [AcademicResourceController::class, 'index'])->name('academic-resources.index');
+
+// Career Opportunities - Public facing
+Route::get('/career-opportunities', [CareerOpportunityController::class, 'index'])->name('career-opportunities.index');
+Route::get('/career-opportunities/{opportunity}', [CareerOpportunityController::class, 'show'])->name('career-opportunities.show');
 
 // Public contact form submission
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
@@ -90,6 +96,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/academic-resources/{resource}/edit', [AdminAcademicResourceController::class, 'edit'])->name('academic-resources.edit');
         Route::put('/academic-resources/{resource}', [AdminAcademicResourceController::class, 'update'])->name('academic-resources.update');
         Route::delete('/academic-resources/{resource}', [AdminAcademicResourceController::class, 'destroy'])->name('academic-resources.destroy');
+        
+        // Career Opportunities management
+        Route::get('/career-opportunities', [AdminCareerOpportunityController::class, 'index'])->name('career-opportunities.index');
+        Route::post('/career-opportunities', [AdminCareerOpportunityController::class, 'store'])->name('career-opportunities.store');
+        Route::get('/career-opportunities/{opportunity}/edit', [AdminCareerOpportunityController::class, 'edit'])->name('career-opportunities.edit');
+        Route::put('/career-opportunities/{opportunity}', [AdminCareerOpportunityController::class, 'update'])->name('career-opportunities.update');
+        Route::delete('/career-opportunities/{opportunity}', [AdminCareerOpportunityController::class, 'destroy'])->name('career-opportunities.destroy');
         
         // Batch management
         Route::get('/batches', [AdminBatchController::class, 'index'])->name('batches.index');
