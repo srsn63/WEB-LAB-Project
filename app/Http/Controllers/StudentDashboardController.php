@@ -44,10 +44,17 @@ class StudentDashboardController extends Controller
     /**
      * Show student courses based on their semester
      */
-    public function courses()
+    public function courses(Request $request)
     {
         $student = Auth::guard('student')->user();
-        $courses = Course::forSemester($student->current_semester)
+        
+        // Get selected semester from query parameter, default to current semester
+        $selectedSemester = $request->query('semester', $student->current_semester);
+        
+        // Get all available semesters
+        $semesters = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', '4-1', '4-2'];
+        
+        $courses = Course::forSemester($selectedSemester)
             ->orderBy('course_code')
             ->get();
         
@@ -56,11 +63,11 @@ class StudentDashboardController extends Controller
         foreach ($courses as $course) {
             $courseResults[$course->id] = StudentResult::forStudent($student->student_id)
                 ->where('course_id', $course->id)
-                ->where('semester', $student->current_semester)
+                ->where('semester', $selectedSemester)
                 ->get();
         }
         
-        return view('student.courses', compact('student', 'courses', 'courseResults'));
+        return view('student.courses', compact('student', 'courses', 'courseResults', 'selectedSemester', 'semesters'));
     }
 
     /**

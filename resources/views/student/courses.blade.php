@@ -129,6 +129,53 @@
             align-items: center;
             gap: 1rem;
         }
+        /* Semester Filter */
+        .semester-filter {
+            background: rgba(10, 14, 39, 0.95);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .semester-filter-label {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .semester-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        .semester-tab {
+            padding: 0.5rem 1.25rem;
+            border: 2px solid rgba(96, 165, 250, 0.3);
+            background: transparent;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .semester-tab:hover {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            color: #60a5fa;
+            transform: translateY(-2px);
+        }
+        .semester-tab.active {
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            border-color: #60a5fa;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
+        }
         .course-card {
             background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             border: 2px solid rgba(96, 165, 250, 0.2);
@@ -314,11 +361,26 @@
                 </div>
             </div>
 
+            <!-- Semester Filter -->
+            <div class="semester-filter">
+                <div class="semester-filter-label">
+                    <i class="bi bi-funnel-fill me-2"></i>Filter by Semester:
+                </div>
+                <div class="semester-tabs">
+                    @foreach($semesters as $semester)
+                        <a href="{{ route('student.courses', ['semester' => $semester]) }}" 
+                           class="semester-tab {{ $selectedSemester == $semester ? 'active' : '' }}">
+                            {{ $semester }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
             @if($courses->isEmpty())
                 <div class="empty-state">
                     <i class="bi bi-inbox"></i>
                     <h3>No Courses Available</h3>
-                    <p>No courses have been added for Semester {{ $student->current_semester ?? 'N/A' }} yet.</p>
+                    <p>No courses have been added for Semester {{ $selectedSemester ?? 'N/A' }} yet.</p>
                     <p style="margin-top: 1rem;">Please contact your administrator or check back later.</p>
                 </div>
             @else

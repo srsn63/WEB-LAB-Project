@@ -21,31 +21,45 @@ class AcademicResourceController extends Controller
         $selectedBatchId = $request->input('batch_id', $batches->first()?->id);
         $selectedBatch = Batch::find($selectedBatchId);
 
-        // Get resources for the selected batch
-        $courseMaterials = AcademicResource::active()
-            ->where('batch_id', $selectedBatchId)
-            ->category('course_material')
-            ->orderByDesc('created_at')
-            ->get();
+        // Get selected semester from request
+        $selectedSemester = $request->input('semester');
 
-        $syllabi = AcademicResource::active()
-            ->where('batch_id', $selectedBatchId)
-            ->category('syllabus')
-            ->orderByDesc('created_at')
-            ->get();
+        // Available semesters
+        $semesters = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', '4-1', '4-2'];
 
-        $academicCalendars = AcademicResource::active()
+        // Build query for resources
+        $courseMaterialsQuery = AcademicResource::active()
             ->where('batch_id', $selectedBatchId)
-            ->category('academic_calendar')
-            ->orderByDesc('created_at')
-            ->get();
+            ->category('course_material');
+        
+        $syllabiQuery = AcademicResource::active()
+            ->where('batch_id', $selectedBatchId)
+            ->category('syllabus');
+        
+        $academicCalendarsQuery = AcademicResource::active()
+            ->where('batch_id', $selectedBatchId)
+            ->category('academic_calendar');
+
+        // Apply semester filter if selected
+        if ($selectedSemester) {
+            $courseMaterialsQuery->where('semester', $selectedSemester);
+            $syllabiQuery->where('semester', $selectedSemester);
+            $academicCalendarsQuery->where('semester', $selectedSemester);
+        }
+
+        // Get results
+        $courseMaterials = $courseMaterialsQuery->orderByDesc('created_at')->get();
+        $syllabi = $syllabiQuery->orderByDesc('created_at')->get();
+        $academicCalendars = $academicCalendarsQuery->orderByDesc('created_at')->get();
 
         return view('academic-resources.index', compact(
             'courseMaterials', 
             'syllabi', 
             'academicCalendars', 
             'batches', 
-            'selectedBatch'
+            'selectedBatch',
+            'semesters',
+            'selectedSemester'
         ));
     }
 }

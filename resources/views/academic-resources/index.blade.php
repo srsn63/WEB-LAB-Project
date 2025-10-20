@@ -242,6 +242,45 @@
             border-color: #3b82f6;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
+        
+        .semester-filter-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .semester-filter-label {
+            color: #93c5fd;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .semester-select {
+            background: rgba(30, 41, 59, 0.9);
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            color: #e2e8f0;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+        
+        .semester-select:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+        
+        .semester-select option {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
     </style>
 </head>
 <body>
@@ -276,6 +315,21 @@
                         {{ $batch->name }}
                     </a>
                 @endforeach
+            </div>
+            
+            <!-- Semester Filter -->
+            <div class="semester-filter-container">
+                <label class="semester-filter-label">
+                    <i class="bi bi-funnel-fill me-2"></i>Filter by Semester:
+                </label>
+                <select class="semester-select" id="semesterFilter" onchange="filterBySemester()">
+                    <option value="">All Semesters</option>
+                    @foreach($semesters as $semester)
+                        <option value="{{ $semester }}" {{ $selectedSemester == $semester ? 'selected' : '' }}>
+                            Semester {{ $semester }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             
             <!-- Navigation Menu -->
@@ -461,6 +515,25 @@
                 }
             });
         });
+        
+        // Semester filter function
+        function filterBySemester() {
+            const semester = document.getElementById('semesterFilter').value;
+            const batchId = '{{ $selectedBatch ? $selectedBatch->id : "" }}';
+            const url = new URL(window.location.href);
+            
+            if (semester) {
+                url.searchParams.set('semester', semester);
+            } else {
+                url.searchParams.delete('semester');
+            }
+            
+            if (batchId) {
+                url.searchParams.set('batch_id', batchId);
+            }
+            
+            window.location.href = url.toString();
+        }
     </script>
 </body>
 </html>

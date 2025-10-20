@@ -36,12 +36,14 @@ class AdminStudentController extends Controller
             'email' => ['required', 'email', 'unique:students,email', 'regex:/@stud\.kuet\.ac\.bd$/'],
             'password' => ['required', 'string', 'min:6'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'profile_picture' => ['nullable', 'url', 'max:500'],
             'cgpa' => ['nullable', 'numeric', 'min:0', 'max:4'],
             'current_semester' => ['nullable', 'string', 'max:50'],
             'is_active' => ['nullable', 'boolean'],
         ], [
             'email.regex' => 'Email must end with @stud.kuet.ac.bd',
             'batch.regex' => 'Batch must be in format 2k20, 2k21, 2k22, 2k23, or 2k24',
+            'profile_picture.url' => 'Profile picture must be a valid URL',
         ]);
 
         // Generate student ID
@@ -61,6 +63,7 @@ class AdminStudentController extends Controller
             'password' => Hash::make($data['password']),
             'batch' => $data['batch'],
             'phone' => $data['phone'] ?? null,
+            'profile_picture' => $data['profile_picture'] ?? null,
             'cgpa' => $data['cgpa'] ?? 0.00,
             'current_semester' => $data['current_semester'] ?? null,
             'is_active' => $request->has('is_active'),
@@ -92,17 +95,20 @@ class AdminStudentController extends Controller
             'email' => ['required', 'email', 'unique:students,email,' . $student->id, 'regex:/@stud\.kuet\.ac\.bd$/'],
             'password' => ['nullable', 'string', 'min:6'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'profile_picture' => ['nullable', 'url', 'max:500'],
             'cgpa' => ['nullable', 'numeric', 'min:0', 'max:4'],
             'current_semester' => ['nullable', 'string', 'max:50'],
             'is_active' => ['nullable', 'boolean'],
         ], [
             'email.regex' => 'Email must end with @stud.kuet.ac.bd',
+            'profile_picture.url' => 'Profile picture must be a valid URL',
         ]);
 
         $updateData = [
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'] ?? null,
+            'profile_picture' => $data['profile_picture'] ?? null,
             'cgpa' => $data['cgpa'] ?? 0.00,
             'current_semester' => $data['current_semester'] ?? null,
             'is_active' => $request->has('is_active'),

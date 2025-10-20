@@ -116,7 +116,17 @@
 
                         <div class="mb-3">
                             <label class="form-label">Semester</label>
-                            <input type="text" name="semester" class="form-control @error('semester') is-invalid @enderror" value="{{ old('semester') }}" placeholder="e.g., Fall 2024">
+                            <select name="semester" class="form-select @error('semester') is-invalid @enderror">
+                                <option value="">Select Semester (Optional)</option>
+                                <option value="1-1" {{ old('semester') == '1-1' ? 'selected' : '' }}>1-1</option>
+                                <option value="1-2" {{ old('semester') == '1-2' ? 'selected' : '' }}>1-2</option>
+                                <option value="2-1" {{ old('semester') == '2-1' ? 'selected' : '' }}>2-1</option>
+                                <option value="2-2" {{ old('semester') == '2-2' ? 'selected' : '' }}>2-2</option>
+                                <option value="3-1" {{ old('semester') == '3-1' ? 'selected' : '' }}>3-1</option>
+                                <option value="3-2" {{ old('semester') == '3-2' ? 'selected' : '' }}>3-2</option>
+                                <option value="4-1" {{ old('semester') == '4-1' ? 'selected' : '' }}>4-1</option>
+                                <option value="4-2" {{ old('semester') == '4-2' ? 'selected' : '' }}>4-2</option>
+                            </select>
                             @error('semester')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 

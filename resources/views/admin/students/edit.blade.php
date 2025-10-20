@@ -150,6 +150,13 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Profile Picture URL</label>
+                            <input type="url" name="profile_picture" class="form-control @error('profile_picture') is-invalid @enderror" value="{{ old('profile_picture', $student->profile_picture) }}" placeholder="https://example.com/image.jpg">
+                            @error('profile_picture')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <small class="text-muted">Enter a valid image URL (optional)</small>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">CGPA</label>
                             <input type="number" step="0.01" min="0" max="4" name="cgpa" class="form-control @error('cgpa') is-invalid @enderror" value="{{ old('cgpa', $student->cgpa) }}">
                             @error('cgpa')<div class="invalid-feedback">{{ $message }}</div>@enderror
