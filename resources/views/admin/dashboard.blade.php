@@ -503,6 +503,59 @@
         </div>
     </div>
 
+    <!-- Academic Programs Management Section -->
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body p-0">
+                    <div class="form-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h2 class="card-title h4 mb-1">Manage Academic Programs</h2>
+                                <p class="section-note mb-0">Manage degree programs, curriculum, and learning outcomes</p>
+                            </div>
+                            <a href="{{ route('admin.programs.index') }}" class="btn btn-primary">
+                                <i class="bi bi-mortarboard-fill me-1"></i> Full Management Panel
+                            </a>
+                        </div>
+                        
+                        <div class="row g-4 mt-2">
+                            <!-- Quick Stats -->
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-mortarboard-fill text-primary" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Program::where('is_active', true)->count() }}</h3>
+                                    <p>Active Programs</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-bookmark-fill text-success" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Program::where('degree_type', 'undergraduate')->where('is_active', true)->count() }}</h3>
+                                    <p>Undergraduate</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-award-fill text-info" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Program::where('degree_type', 'postgraduate')->where('is_active', true)->count() }}</h3>
+                                    <p>Postgraduate</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-list-check text-warning" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\ProgramOutcome::count() }}</h3>
+                                    <p>Learning Outcomes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Student Management Section -->
     <div class="row g-4 mt-4">
         <div class="col-12">

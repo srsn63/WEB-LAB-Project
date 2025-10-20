@@ -1256,10 +1256,10 @@ html {
       <p class="typed-text-container animate__animated animate__fadeInUp animate__delay-1s">
         <span class="typed-text"></span>
       </p>
-      <button class="btn hero-btn animate__animated animate__zoomIn animate__delay-2s">
+      <a href="{{ route('programs.index') }}" class="btn hero-btn animate__animated animate__zoomIn animate__delay-2s">
         Explore Our Programs 
         <i class="bi bi-arrow-right"></i>
-      </button>
+      </a>
     </div>
   </section>
 

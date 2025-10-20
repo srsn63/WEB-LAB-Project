@@ -21,6 +21,8 @@ use App\Http\Controllers\AdminAcademicResourceController;
 use App\Http\Controllers\AdminBatchController;
 use App\Http\Controllers\CareerOpportunityController;
 use App\Http\Controllers\AdminCareerOpportunityController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\AdminProgramController;
 use App\Models\Notice;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +60,10 @@ Route::get('/academic-resources', [AcademicResourceController::class, 'index'])-
 // Career Opportunities - Public facing
 Route::get('/career-opportunities', [CareerOpportunityController::class, 'index'])->name('career-opportunities.index');
 Route::get('/career-opportunities/{opportunity}', [CareerOpportunityController::class, 'show'])->name('career-opportunities.show');
+
+// Programs - Public facing
+Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
+Route::get('/programs/{program}', [ProgramController::class, 'show'])->name('programs.show');
 
 // Public contact form submission
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
@@ -103,6 +109,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/career-opportunities/{opportunity}/edit', [AdminCareerOpportunityController::class, 'edit'])->name('career-opportunities.edit');
         Route::put('/career-opportunities/{opportunity}', [AdminCareerOpportunityController::class, 'update'])->name('career-opportunities.update');
         Route::delete('/career-opportunities/{opportunity}', [AdminCareerOpportunityController::class, 'destroy'])->name('career-opportunities.destroy');
+        
+        // Programs management
+        Route::get('/programs', [AdminProgramController::class, 'index'])->name('programs.index');
+        Route::post('/programs', [AdminProgramController::class, 'store'])->name('programs.store');
+        Route::get('/programs/{program}/edit', [AdminProgramController::class, 'edit'])->name('programs.edit');
+        Route::put('/programs/{program}', [AdminProgramController::class, 'update'])->name('programs.update');
+        Route::delete('/programs/{program}', [AdminProgramController::class, 'destroy'])->name('programs.destroy');
+        
+        // Program courses management
+        Route::get('/programs/{program}/courses', [AdminProgramController::class, 'courses'])->name('programs.courses');
+        Route::post('/programs/{program}/courses', [AdminProgramController::class, 'addCourse'])->name('programs.add-course');
+        Route::delete('/programs/{program}/courses/{programCourse}', [AdminProgramController::class, 'removeCourse'])->name('programs.remove-course');
+        
+        // Program outcomes management
+        Route::get('/programs/{program}/outcomes', [AdminProgramController::class, 'outcomes'])->name('programs.outcomes');
+        Route::post('/programs/{program}/outcomes', [AdminProgramController::class, 'addOutcome'])->name('programs.add-outcome');
+        Route::delete('/programs/{program}/outcomes/{outcome}', [AdminProgramController::class, 'deleteOutcome'])->name('programs.delete-outcome');
         
         // Batch management
         Route::get('/batches', [AdminBatchController::class, 'index'])->name('batches.index');

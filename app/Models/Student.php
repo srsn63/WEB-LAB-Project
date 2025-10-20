@@ -15,6 +15,8 @@ class Student extends Authenticatable
         'email',
         'password',
         'batch',
+        'batch_id',
+        'program_id',
         'phone',
         'profile_picture',
         'cgpa',
@@ -121,5 +123,21 @@ class Student extends Authenticatable
     public function getSerialFromId(): int
     {
         return (int) substr($this->student_id, 4, 3);
+    }
+
+    /**
+     * Get the program the student is enrolled in
+     */
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
+
+    /**
+     * Get the batch the student belongs to
+     */
+    public function batchRecord()
+    {
+        return $this->belongsTo(Batch::class, 'batch_id');
     }
 }
