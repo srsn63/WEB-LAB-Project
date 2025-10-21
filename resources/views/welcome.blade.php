@@ -1244,6 +1244,7 @@ html {
           <li class="nav-item"><a class="nav-link" href="#students">Students</a></li>
           <li class="nav-item"><a class="nav-link" href="#notices">Notices</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('clubs.index') }}">Clubs</a></li>
         </ul>
       </div>
     </div>

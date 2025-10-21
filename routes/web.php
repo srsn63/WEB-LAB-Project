@@ -23,6 +23,8 @@ use App\Http\Controllers\CareerOpportunityController;
 use App\Http\Controllers\AdminCareerOpportunityController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\AdminProgramController;
+use App\Http\Controllers\ClubController;
+use App\Http\Controllers\AdminClubController;
 use App\Models\Notice;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +66,10 @@ Route::get('/career-opportunities/{opportunity}', [CareerOpportunityController::
 // Programs - Public facing
 Route::get('/programs', [ProgramController::class, 'index'])->name('programs.index');
 Route::get('/programs/{program}', [ProgramController::class, 'show'])->name('programs.show');
+
+// Clubs - Public facing
+Route::get('/clubs', [ClubController::class, 'index'])->name('clubs.index');
+Route::get('/clubs/{club}', [ClubController::class, 'show'])->name('clubs.show');
 
 // Public contact form submission
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
@@ -126,6 +132,31 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/programs/{program}/outcomes', [AdminProgramController::class, 'outcomes'])->name('programs.outcomes');
         Route::post('/programs/{program}/outcomes', [AdminProgramController::class, 'addOutcome'])->name('programs.add-outcome');
         Route::delete('/programs/{program}/outcomes/{outcome}', [AdminProgramController::class, 'deleteOutcome'])->name('programs.delete-outcome');
+        
+        // Clubs management
+        Route::get('/clubs', [AdminClubController::class, 'index'])->name('clubs.index');
+        Route::post('/clubs', [AdminClubController::class, 'store'])->name('clubs.store');
+        Route::get('/clubs/{club}/edit', [AdminClubController::class, 'edit'])->name('clubs.edit');
+        Route::put('/clubs/{club}', [AdminClubController::class, 'update'])->name('clubs.update');
+        Route::delete('/clubs/{club}', [AdminClubController::class, 'destroy'])->name('clubs.destroy');
+        
+        // Club members management
+        Route::get('/clubs/{club}/members', [AdminClubController::class, 'members'])->name('clubs.members');
+        Route::post('/clubs/{club}/members', [AdminClubController::class, 'addMember'])->name('clubs.add-member');
+        Route::put('/clubs/{club}/members/{member}', [AdminClubController::class, 'updateMember'])->name('clubs.update-member');
+        Route::delete('/clubs/{club}/members/{member}', [AdminClubController::class, 'removeMember'])->name('clubs.remove-member');
+        
+        // Club workshops management
+        Route::get('/clubs/{club}/workshops', [AdminClubController::class, 'workshops'])->name('clubs.workshops');
+        Route::post('/clubs/{club}/workshops', [AdminClubController::class, 'storeWorkshop'])->name('clubs.workshops.store');
+        Route::put('/clubs/{club}/workshops/{workshop}', [AdminClubController::class, 'updateWorkshop'])->name('clubs.workshops.update');
+        Route::delete('/clubs/{club}/workshops/{workshop}', [AdminClubController::class, 'destroyWorkshop'])->name('clubs.workshops.destroy');
+        
+        // Club events management
+        Route::get('/clubs/{club}/events', [AdminClubController::class, 'events'])->name('clubs.events');
+        Route::post('/clubs/{club}/events', [AdminClubController::class, 'storeEvent'])->name('clubs.events.store');
+        Route::put('/clubs/{club}/events/{event}', [AdminClubController::class, 'updateEvent'])->name('clubs.events.update');
+        Route::delete('/clubs/{club}/events/{event}', [AdminClubController::class, 'destroyEvent'])->name('clubs.events.destroy');
         
         // Batch management
         Route::get('/batches', [AdminBatchController::class, 'index'])->name('batches.index');

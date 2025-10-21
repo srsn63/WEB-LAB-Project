@@ -621,6 +621,64 @@
             </div>
         </div>
 
+        <!-- Manage Clubs Section -->
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body p-0">
+                    <div class="form-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h2 class="card-title h4 mb-1">Manage Student Clubs</h2>
+                                <p class="section-note mb-0">Add and manage student clubs, members, workshops, and events</p>
+                            </div>
+                            <a href="{{ route('admin.clubs.index') }}" class="btn btn-primary">
+                                <i class="bi bi-people-fill me-1"></i> Full Clubs Management
+                            </a>
+                        </div>
+                        
+                        <div class="row g-4 mt-2">
+                            <!-- Quick Stats -->
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Club::count() }}</h3>
+                                    <p>Total Clubs</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Club::where('is_active', true)->count() }}</h3>
+                                    <p>Active Clubs</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-person-badge text-info" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\ClubMember::count() }}</h3>
+                                    <p>Total Members</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-book text-warning" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\ClubWorkshop::count() }}</h3>
+                                    <p>Workshops</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-calendar-event text-danger" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\ClubEvent::count() }}</h3>
+                                    <p>Events</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Manage Results Section -->
         <div class="col-12">
             <div class="card card-glass">
