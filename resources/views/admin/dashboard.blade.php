@@ -670,7 +670,58 @@
                                 <div class="stat-card">
                                     <i class="bi bi-calendar-event text-danger" style="font-size: 2rem;"></i>
                                     <h3>{{ \App\Models\ClubEvent::count() }}</h3>
-                                    <p>Events</p>
+                                    <p>Club Events</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Events Section -->
+        <div class="col-12">
+            <div class="card card-glass">
+                <div class="card-body p-0">
+                    <div class="form-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h2 class="card-title h4 mb-1">Manage Department Events</h2>
+                                <p class="section-note mb-0">Schedule and manage department-wide events, workshops, seminars, and competitions</p>
+                            </div>
+                            <a href="{{ route('admin.events.index') }}" class="btn btn-primary">
+                                <i class="bi bi-calendar-event-fill me-1"></i> Full Events Management
+                            </a>
+                        </div>
+                        
+                        <div class="row g-4 mt-2">
+                            <!-- Quick Stats -->
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-calendar-event text-purple" style="font-size: 2rem; color: #a78bfa;"></i>
+                                    <h3>{{ \App\Models\Event::count() }}</h3>
+                                    <p>Total Events</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-calendar-check text-primary" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Event::active()->upcoming()->count() }}</h3>
+                                    <p>Upcoming Events</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-clock-history text-secondary" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Event::active()->past()->count() }}</h3>
+                                    <p>Past Events</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
+                                    <h3>{{ \App\Models\Event::active()->featured()->count() }}</h3>
+                                    <p>Featured Events</p>
                                 </div>
                             </div>
                         </div>

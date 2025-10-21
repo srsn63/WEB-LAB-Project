@@ -25,9 +25,12 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\AdminProgramController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\AdminClubController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\AdminEventController;
 use App\Models\Notice;
 use App\Models\Teacher;
 use App\Models\Club;
+use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 
@@ -57,7 +60,16 @@ Route::get('/', function () {
             ->get();
     });
 
-    return view('welcome', compact('teachers', 'notices', 'clubs'));
+    // Cache events for 1 hour to improve performance
+    $events = Cache::remember('homepage_events', 3600, function () {
+        return Event::select('id', 'title', 'description', 'event_type', 'venue', 'event_date', 'banner_image')
+            ->active()
+            ->upcoming()
+            ->take(6)
+            ->get();
+    });
+
+    return view('welcome', compact('teachers', 'notices', 'clubs', 'events'));
 })->name('home');
 
 Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
@@ -80,6 +92,10 @@ Route::get('/programs/{program}', [ProgramController::class, 'show'])->name('pro
 // Clubs - Public facing
 Route::get('/clubs', [ClubController::class, 'index'])->name('clubs.index');
 Route::get('/clubs/{club}', [ClubController::class, 'show'])->name('clubs.show');
+
+// Events - Public facing
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
 // Public contact form submission
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
@@ -167,6 +183,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/clubs/{club}/events', [AdminClubController::class, 'storeEvent'])->name('clubs.events.store');
         Route::put('/clubs/{club}/events/{event}', [AdminClubController::class, 'updateEvent'])->name('clubs.events.update');
         Route::delete('/clubs/{club}/events/{event}', [AdminClubController::class, 'destroyEvent'])->name('clubs.events.destroy');
+        
+        // Events management
+        Route::get('/events', [AdminEventController::class, 'index'])->name('events.index');
+        Route::post('/events', [AdminEventController::class, 'store'])->name('events.store');
+        Route::get('/events/{event}/edit', [AdminEventController::class, 'edit'])->name('events.edit');
+        Route::put('/events/{event}', [AdminEventController::class, 'update'])->name('events.update');
+        Route::delete('/events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');
         
         // Batch management
         Route::get('/batches', [AdminBatchController::class, 'index'])->name('batches.index');

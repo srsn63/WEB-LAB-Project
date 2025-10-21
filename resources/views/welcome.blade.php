@@ -1242,9 +1242,10 @@ html {
           <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#faculty">Faculty</a></li>
           <li class="nav-item"><a class="nav-link" href="#students">Students</a></li>
+          <li class="nav-item"><a class="nav-link" href="#clubs">Clubs</a></li>
+          <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
           <li class="nav-item"><a class="nav-link" href="#notices">Notices</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="#clubs">Clubs</a></li>
         </ul>
       </div>
     </div>
@@ -1414,6 +1415,66 @@ html {
       @if($clubs->count() > 0)
         <div class="text-center mt-5">
           <a href="{{ route('clubs.index') }}" class="btn faculty-btn">View All Clubs</a>
+        </div>
+      @endif
+    </div>
+  </section>
+
+  <!-- EVENTS SECTION -->
+  <section id="events" class="students-section" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Upcoming Events</h2>
+        <p>Join us for exciting workshops, seminars, competitions, and more</p>
+      </div>
+      <div class="row g-4">
+        @forelse($events as $event)
+          <div class="col-md-4">
+            <div class="student-card">
+              @if($event->banner_image)
+                <div style="margin-bottom: 1.5rem;">
+                  <img src="{{ asset('storage/' . $event->banner_image) }}" alt="{{ $event->title }}" 
+                       style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px; border: 2px solid rgba(96, 165, 250, 0.3);">
+                </div>
+              @else
+                <i class="bi bi-calendar-event"></i>
+              @endif
+              <h4>{{ $event->title }}</h4>
+              @if($event->event_type)
+                <p style="color: #60a5fa; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                  <i class="bi bi-tag-fill"></i> {{ $event->event_type }}
+                </p>
+              @endif
+              <p>{{ Str::limit($event->description, 100) }}</p>
+              <div style="margin-bottom: 1rem; color: #94a3b8; font-size: 0.9rem;">
+                <div style="margin-bottom: 0.25rem;">
+                  <i class="bi bi-calendar3"></i> {{ $event->event_date->format('M d, Y') }}
+                </div>
+                <div style="margin-bottom: 0.25rem;">
+                  <i class="bi bi-clock"></i> {{ $event->event_date->format('g:i A') }}
+                </div>
+                @if($event->venue)
+                <div>
+                  <i class="bi bi-geo-alt-fill"></i> {{ $event->venue }}
+                </div>
+                @endif
+              </div>
+              <a href="{{ route('events.show', $event) }}" class="btn faculty-btn">View Event</a>
+            </div>
+          </div>
+        @empty
+          <div class="col-12">
+            <div class="student-card text-center">
+              <i class="bi bi-calendar-event" style="font-size: 4rem; opacity: 0.5;"></i>
+              <h4>No Upcoming Events</h4>
+              <p>Check back later for exciting events, workshops, and seminars.</p>
+            </div>
+          </div>
+        @endforelse
+      </div>
+      @if($events->count() > 0)
+        <div class="text-center mt-5">
+          <a href="{{ route('events.index') }}" class="btn faculty-btn">View All Events</a>
         </div>
       @endif
     </div>
