@@ -35,11 +35,18 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 
 Route::get('/', function () {
-    // Cache teachers for 1 hour to improve performance
+    // Cache teachers for 1 hour to improve performance - ALL teachers in hierarchical order
     $teachers = Cache::remember('homepage_teachers', 3600, function () {
         return Teacher::select('id', 'name', 'designation', 'profile_image', 'short_bio', 'research_interests', 'is_head')
-            ->ordered()
-            ->take(3)
+            ->orderByRaw("CASE WHEN is_head = 1 THEN 0 ELSE 1 END") // Department head first
+            ->orderByRaw("CASE designation
+                WHEN 'Professor' THEN 1
+                WHEN 'Associate Professor' THEN 2
+                WHEN 'Assistant Professor' THEN 3
+                WHEN 'Lecturer' THEN 4
+                ELSE 5
+            END") // Then by designation hierarchy
+            ->orderBy('name') // Finally alphabetically
             ->get();
     });
     

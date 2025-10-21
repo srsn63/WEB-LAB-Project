@@ -1230,7 +1230,7 @@ html {
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img src="KUET_CSE.png" alt="KUET Logo">
+        {{-- <img src="CSE_LOGO.png" alt="KUET Logo"> --}}
         KUET CSE
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -1276,7 +1276,7 @@ html {
           <p>The Department of Computer Science and Engineering (CSE) at Khulna University of Engineering & Technology (KUET) is one of the leading departments in the field of computer science and engineering education in Bangladesh.</p>
           <p>Established in 1999, the department offers undergraduate and postgraduate programs with a focus on producing skilled computer engineers and researchers who can contribute to the technological advancement of the country.</p>
           <p>Our curriculum is designed to provide students with a strong foundation in both theoretical and practical aspects of computer science, preparing them for successful careers in industry, academia, and research.</p>
-          <button class="btn faculty-btn mt-3">Learn More</button>
+          {{-- <button class="btn faculty-btn mt-3">Learn More</button> --}}
         </div>
         <div class="col-lg-6 about-img">
           <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="CSE Department" class="img-fluid">
@@ -1299,7 +1299,7 @@ html {
         @endphp
 
         @if($head)
-          <!-- Head of Department -->
+          <!-- Head of Department - Special Highlighted Card -->
           <div class="faculty-head-card">
             <div class="head-of-department">
               <div class="head-image">
@@ -1318,23 +1318,23 @@ html {
           </div>
         @endif
 
-        <!-- Regular Faculty Grid -->
+        <!-- All Other Faculty Members in Hierarchical Order -->
         <div class="faculty-grid">
-          @foreach($others as $teacher)
+          @forelse($others as $teacher)
             <div class="faculty-card">
               <img src="{{ $teacher->profile_image ?: 'https://via.placeholder.com/400x400?text=Profile' }}" alt="Faculty Member" class="faculty-image" loading="lazy">
               <h4 class="faculty-name">{{ $teacher->name }}</h4>
               <p class="faculty-designation">{{ $teacher->designation }}</p>
               @if(!empty($teacher->research_interests))
-                <p class="faculty-research">{{ $teacher->research_interests }}</p>
+                <p class="faculty-research">{{ Str::limit($teacher->research_interests, 80) }}</p>
               @endif
               <a href="{{ route('teachers.show', $teacher) }}" class="faculty-btn">View Profile</a>
             </div>
-          @endforeach
-        </div>
-        
-        <div class="text-center mt-5">
-          <a href="{{ route('teachers.index') }}" class="btn faculty-btn">View All Faculty Members</a>
+          @empty
+            <div class="col-12 text-center">
+              <p class="text-muted">No other faculty members found.</p>
+            </div>
+          @endforelse
         </div>
       </div>
     </div>
@@ -1572,7 +1572,7 @@ html {
   <footer>
     <div class="container">
       <div class="row g-4">
-        <div class="col-lg-4 mb-4">
+        <div class="col-lg-12 mb-4">
           <a href="#" class="footer-logo">KUET CSE</a>
           <p>The Department of Computer Science and Engineering at KUET is committed to excellence in education, research, and innovation in the field of computer science and engineering.</p>
           <div class="social-icons mt-4">
@@ -1580,40 +1580,6 @@ html {
             <a href="#"><i class="bi bi-twitter"></i></a>
             <a href="#"><i class="bi bi-linkedin"></i></a>
             <a href="#"><i class="bi bi-youtube"></i></a>
-          </div>
-        </div>
-        <div class="col-lg-2 col-md-6 mb-4">
-          <div class="footer-links">
-            <h5>Quick Links</h5>
-            <ul>
-              <li><a href="#">Home</a></li>
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Faculty</a></li>
-              <li><a href="#">Students</a></li>
-              <li><a href="#">Notices</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="footer-links">
-            <h5>Academics</h5>
-            <ul>
-              <li><a href="#">Undergraduate Programs</a></li>
-              <li><a href="#">Graduate Programs</a></li>
-              <li><a href="#">Course Catalog</a></li>
-              <li><a href="#">Academic Calendar</a></li>
-              <li><a href="#">Research Areas</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="footer-links">
-            <h5>Contact Info</h5>
-            <ul>
-              <li><i class="bi bi-geo-alt me-2"></i> KUET Campus, Khulna</li>
-              <li><i class="bi bi-envelope me-2"></i> cse@kuet.ac.bd</li>
-              <li><i class="bi bi-telephone me-2"></i> +880-XXX-XXXXXXX</li>
-            </ul>
           </div>
         </div>
       </div>
