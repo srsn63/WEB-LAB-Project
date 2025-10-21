@@ -1244,7 +1244,7 @@ html {
           <li class="nav-item"><a class="nav-link" href="#students">Students</a></li>
           <li class="nav-item"><a class="nav-link" href="#notices">Notices</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('clubs.index') }}">Clubs</a></li>
+          <li class="nav-item"><a class="nav-link" href="#clubs">Clubs</a></li>
         </ul>
       </div>
     </div>
@@ -1371,6 +1371,51 @@ html {
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Clubs Section -->
+  <section id="clubs" class="students-section" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Student Clubs</h2>
+        <p>Explore our vibrant student clubs and communities</p>
+      </div>
+      <div class="row g-4">
+        @forelse($clubs as $club)
+          <div class="col-md-4">
+            <div class="student-card">
+              @if($club->logo)
+                <div style="margin-bottom: 1.5rem;">
+                  <img src="{{ asset('storage/' . $club->logo) }}" alt="{{ $club->name }}" 
+                       style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid rgba(96, 165, 250, 0.3);">
+                </div>
+              @else
+                <i class="bi bi-people-fill"></i>
+              @endif
+              <h4>{{ $club->short_name }}</h4>
+              <p>{{ Str::limit($club->description, 100) }}</p>
+              <div style="margin-bottom: 1rem; color: #94a3b8; font-size: 0.9rem;">
+                <i class="bi bi-people"></i> {{ $club->active_members_count }} {{ Str::plural('Member', $club->active_members_count) }}
+              </div>
+              <a href="{{ route('clubs.show', $club) }}" class="btn faculty-btn">View Club</a>
+            </div>
+          </div>
+        @empty
+          <div class="col-12">
+            <div class="student-card text-center">
+              <i class="bi bi-people" style="font-size: 4rem; opacity: 0.5;"></i>
+              <h4>No Clubs Available</h4>
+              <p>Check back later for updates on student clubs.</p>
+            </div>
+          </div>
+        @endforelse
+      </div>
+      @if($clubs->count() > 0)
+        <div class="text-center mt-5">
+          <a href="{{ route('clubs.index') }}" class="btn faculty-btn">View All Clubs</a>
+        </div>
+      @endif
     </div>
   </section>
 

@@ -27,6 +27,7 @@ use App\Http\Controllers\ClubController;
 use App\Http\Controllers\AdminClubController;
 use App\Models\Notice;
 use App\Models\Teacher;
+use App\Models\Club;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 
@@ -47,7 +48,16 @@ Route::get('/', function () {
             ->get();
     });
 
-    return view('welcome', compact('teachers', 'notices'));
+    // Cache clubs for 1 hour to improve performance
+    $clubs = Cache::remember('homepage_clubs', 3600, function () {
+        return Club::select('id', 'name', 'short_name', 'description', 'logo')
+            ->active()
+            ->ordered()
+            ->withCount('activeMembers')
+            ->get();
+    });
+
+    return view('welcome', compact('teachers', 'notices', 'clubs'));
 })->name('home');
 
 Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
