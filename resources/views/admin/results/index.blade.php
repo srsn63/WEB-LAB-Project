@@ -213,7 +213,6 @@
                         <div class="mb-3">
                             <label class="form-label">Exam Type *</label>
                             <select name="exam_type" class="form-select @error('exam_type') is-invalid @enderror" required>
-                                <option value="midterm" {{ old('exam_type') == 'midterm' ? 'selected' : '' }}>Midterm</option>
                                 <option value="final" {{ old('exam_type') == 'final' ? 'selected' : '' }}>Final</option>
                                 <option value="quiz" {{ old('exam_type') == 'quiz' ? 'selected' : '' }}>Quiz</option>
                                 <option value="assignment" {{ old('exam_type') == 'assignment' ? 'selected' : '' }}>Assignment</option>

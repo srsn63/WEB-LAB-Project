@@ -1279,7 +1279,7 @@ html {
           {{-- <button class="btn faculty-btn mt-3">Learn More</button> --}}
         </div>
         <div class="col-lg-6 about-img">
-          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="CSE Department" class="img-fluid">
+          <img src="https://i.ibb.co.com/KcJgKtpb/ICPC.jpg" alt="CSE Department" class="img-fluid">
         </div>
       </div>
     </div>

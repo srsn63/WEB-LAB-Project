@@ -48,7 +48,7 @@ class AdminResultController extends Controller
             'student_id' => 'required|exists:students,student_id',
             'course_id' => 'required|exists:courses,id',
             'semester' => 'required|in:1-1,1-2,2-1,2-2,3-1,3-2,4-1,4-2',
-            'exam_type' => 'required|in:midterm,final,quiz,assignment,project',
+            'exam_type' => 'required|in:final,quiz,assignment,project',
             'marks_obtained' => 'required|numeric|min:0',
             'total_marks' => 'required|numeric|min:0',
             'remarks' => 'nullable|string',
@@ -94,7 +94,7 @@ class AdminResultController extends Controller
         $validated = $request->validate([
             'marks_obtained' => 'required|numeric|min:0',
             'total_marks' => 'required|numeric|min:0',
-            'exam_type' => 'required|in:midterm,final,quiz,assignment,project',
+            'exam_type' => 'required|in:final,quiz,assignment,project',
             'remarks' => 'nullable|string',
         ]);
         

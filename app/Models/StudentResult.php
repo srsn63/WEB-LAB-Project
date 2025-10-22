@@ -69,7 +69,7 @@ class StudentResult extends Model
      */
     public static function getExamTypes()
     {
-        return ['midterm', 'final', 'quiz', 'assignment', 'project'];
+        return ['final', 'quiz', 'assignment', 'project'];
     }
 
     /**
